@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cs1lk5kwrp06i"]
+
+[ext_resource type="Script" uid="uid://dbhxrxyrl85vl" path="res://assets/scripts/ui/level_timer.gd" id="1_iamgx"]
+
+[node name="Level Timer" type="Node2D" unique_id=929770682]
+script = ExtResource("1_iamgx")
+
+[node name="Timer" type="Timer" parent="." unique_id=651168834]
+one_shot = true
