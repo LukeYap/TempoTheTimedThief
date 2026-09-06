@@ -8,6 +8,9 @@ const CRAWLSPEED = 120.0		# Crawling movement speed.
 const MOVESPEED = 170.0			# Normal movement speed.
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
 
+const ACCEL = 0.15
+const FRICTION = 0.3
+
 var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
 
@@ -136,9 +139,9 @@ func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	direction = Input.get_axis("move_left", "move_right")
 	if direction:
-		velocity.x = direction * speed
+		velocity.x = lerp(velocity.x, direction * speed, ACCEL)
 	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.x = lerp(velocity.x, 0.0, FRICTION)
 	
 	# ANIMATIONS=================================================
 	# If the player is grounded:
