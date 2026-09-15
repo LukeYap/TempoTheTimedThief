@@ -552,10 +552,10 @@ disabled = true
 debug_color = Color(1, 0, 0, 0.41960785)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1351649107]
-zoom = Vector2(3.5, 3.5)
+position = Vector2(0, -44)
+zoom = Vector2(3, 3)
 process_callback = 0
 limit_smoothed = true
-position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1517579445]

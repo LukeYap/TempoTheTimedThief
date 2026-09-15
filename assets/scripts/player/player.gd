@@ -45,7 +45,6 @@ func _ready():
 #============================================================================
 
 func _physics_process(delta: float) -> void:
-	
 	if not is_on_floor():
 		is_crouching = false				# Player can't crouch mid-air.
 		velocity += get_gravity() * delta	# Apply gravity when airborne.

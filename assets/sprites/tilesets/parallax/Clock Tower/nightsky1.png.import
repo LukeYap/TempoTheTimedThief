@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxi4k3p4gb5p0"
-path="res://.godot/imported/BG Test.png-66f99d927155f851f4f53df267b38bda.ctex"
+uid="uid://dhficdfkx4obu"
+path="res://.godot/imported/nightsky1.png-c1f11e80c88b95dbd1f7cbe907605429.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/cutscenes/BG Test.png"
-dest_files=["res://.godot/imported/BG Test.png-66f99d927155f851f4f53df267b38bda.ctex"]
+source_file="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky1.png"
+dest_files=["res://.godot/imported/nightsky1.png-c1f11e80c88b95dbd1f7cbe907605429.ctex"]
 
 [params]
 

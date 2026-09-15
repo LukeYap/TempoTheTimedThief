@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://70ara05dw35v"]
+
+[ext_resource type="Script" uid="uid://b57xrpltj6sda" path="res://assets/scripts/items and interactables/door_zone.gd" id="1_urpqx"]
+
+[node name="GiveMeACollisionBox!" type="Area2D" unique_id=323326084]
+script = ExtResource("1_urpqx")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

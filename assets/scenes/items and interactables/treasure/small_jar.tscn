@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://mq0eiacgc11w"]
+
+[ext_resource type="Script" uid="uid://brurode4gji3x" path="res://assets/scripts/items and interactables/breakable_treasure.gd" id="1_2ncvw"]
+[ext_resource type="Texture2D" uid="uid://c2gv1kytt5gkh" path="res://assets/sprites/items and interactables/treasure/Small Jar.png" id="1_kf6c8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kf6c8"]
+size = Vector2(10, 13)
+
+[sub_resource type="Animation" id="Animation_owkvv"]
+resource_name = "Broken"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_kf6c8"]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2ncvw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_owkvv"]
+_data = {
+&"Broken": SubResource("Animation_owkvv"),
+&"Idle": SubResource("Animation_kf6c8"),
+&"RESET": SubResource("Animation_2ncvw")
+}
+
+[node name="Small Jar" type="Area2D" unique_id=1163281639]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("1_2ncvw")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1319313317]
+texture = ExtResource("1_kf6c8")
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1456047265]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_kf6c8")
+debug_color = Color(1, 1, 0, 0.41960785)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=631587002]
+root_node = NodePath("../CollisionShape2D")
+libraries/ = SubResource("AnimationLibrary_owkvv")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
