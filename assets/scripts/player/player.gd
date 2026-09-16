@@ -4,6 +4,7 @@ extends CharacterBody2D
 
 var speed = 170.0
 var direction: float = 0.0
+const SLIDESPEED = 500.0		# Sliding movement speed. (Not entirely sure why this has to be set so high to do anything)
 const CRAWLSPEED = 120.0		# Crawling movement speed.
 const MOVESPEED = 170.0			# Normal movement speed.
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
@@ -13,6 +14,7 @@ const FRICTION = 0.3
 
 var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
+var is_sliding: bool = false    # Checks if the player is sliding.
 
 #@onready var state_machine: StateMachine = $StateMachine
 
@@ -52,11 +54,16 @@ func _physics_process(delta: float) -> void:
 		is_crouching = false				# Player can't crouch mid-air.
 		velocity += get_gravity() * delta	# Apply gravity when airborne.
 	
+	# Get the input direction
+	direction = Input.get_axis("move_left", "move_right")
+	
 	# CROUCH=================================================
 	# Toggle for if the player is pressing the crouch input while grounded.
 	
 	if Input.is_action_just_pressed("crouch") and is_on_floor():
 		is_crouching = true
+		if direction:
+			velocity.x = SLIDESPEED * direction
 	if (
 		Input.is_action_just_released("crouch")
 		and is_on_floor()
@@ -135,8 +142,7 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# MOVE=================================================
-	# Get the input direction and handle the movement/deceleration.
-	direction = Input.get_axis("move_left", "move_right")
+	# handle the movement/deceleration.
 	if direction:
 		velocity.x = lerp(velocity.x, direction * speed, ACCEL)
 	else:
@@ -149,7 +155,10 @@ func _physics_process(delta: float) -> void:
 		if is_crouching:
 			# If the player is moving while crouching:
 			if direction:
-				animation_player.play("Crawl")
+				if abs(velocity.x) > CRAWLSPEED + 10.0:
+					animation_player.play("Slide")
+				else:
+					animation_player.play("Crawl")
 			else:
 				animation_player.play("CrouchBeta")
 		# If the player is not crouching:
