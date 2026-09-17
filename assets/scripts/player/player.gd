@@ -42,7 +42,6 @@ var walljump_force: float = 500
 
 func _ready():
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
-	#animation_tree.active = true
 	pass
 	
 #============================================================================
