@@ -53,6 +53,10 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		is_crouching = false				# Player can't crouch mid-air.
 		velocity += get_gravity() * delta	# Apply gravity when airborne.
+		# if wall sliding
+		if is_on_wall_only():
+			# tweak wall slide speed
+			velocity.y = clamp(velocity.y, -99999, 80)
 	
 	# Get the input direction
 	direction = Input.get_axis("move_left", "move_right")
@@ -61,13 +65,16 @@ func _physics_process(delta: float) -> void:
 	# Toggle for if the player is pressing the crouch input while grounded.
 	
 	if Input.is_action_just_pressed("crouch") and is_on_floor():
-		is_crouching = true
-		if direction:
+		if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
 			velocity.x = SLIDESPEED * direction
+		is_crouching = true
+		
 	if (
-		Input.is_action_just_released("crouch")
+		# to make sliding slower or more committal you could make it so you dont stand up until you reach close to crawlspeed (minor buffers are because of lerp btw)
+		not Input.is_action_pressed("crouch")
 		and is_on_floor()
 		and not uncrouchcheck_raycast.is_colliding()
+		and abs(velocity.x) < MOVESPEED
 		):
 		is_crouching = false
 	if is_crouching:
@@ -110,17 +117,17 @@ func _physics_process(delta: float) -> void:
 		):
 		velocity.y = JUMP_VELOCITY / 4
 	
-	# WALL JUMP
-	#if (
-		#is_on_wall_only()
-		##and velocity.x != 0
-		#and Input.is_action_just_pressed("jump")
-		#):
-		## When raycast scale is -1/1, player is facing left/right.
-		## So wall jump should provide a boost in the opposite direction.
-		#print(walljump_raycast.scale.x)
-		#velocity.y = JUMP_VELOCITY
-		#velocity.x = -(walljump_raycast.scale.x) * walljump_force
+	#WALL JUMP
+	if (
+		is_on_wall_only()
+		#and velocity.x != 0
+		and Input.is_action_just_pressed("jump")
+		):
+		# When raycast scale is -1/1, player is facing left/right.
+		# So wall jump should provide a boost in the opposite direction.
+		print(walljump_raycast.scale.x)
+		velocity.y = JUMP_VELOCITY
+		velocity.x = -(walljump_raycast.scale.x) * walljump_force
 	
 	
 	# ATTACK=================================================
