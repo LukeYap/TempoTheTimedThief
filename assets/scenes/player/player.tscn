@@ -7,9 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://dojgir4q76ea7" path="res://assets/sprites/player/Sheets/Jump.png" id="3_xvhxs"]
 [ext_resource type="Texture2D" uid="uid://d2eu0x46hxdch" path="res://assets/sprites/player/Sheets/Crouch.png" id="4_5v77c"]
 [ext_resource type="Texture2D" uid="uid://cmppn4brknccc" path="res://assets/sprites/player/Sheets/Crawl.png" id="4_n7aby"]
-[ext_resource type="Script" uid="uid://failsum58846" path="res://assets/scripts/player/state machine/state_machine.gd" id="5_xvhxs"]
+[ext_resource type="Script" uid="uid://failsum58846" path="res://assets/scripts/player/state machine (UNUSED)/state_machine.gd" id="5_xvhxs"]
 [ext_resource type="Texture2D" uid="uid://bwvf1g3onqqpp" path="res://assets/sprites/player/Sheets/Fall.png" id="6_0g25m"]
 [ext_resource type="Texture2D" uid="uid://1of62oqxee2f" path="res://assets/sprites/player/Sheets/Slide.png" id="9_hyvrl"]
+[ext_resource type="Texture2D" uid="uid://cflnlp3lwu1gh" path="res://assets/sprites/player/Sheets/Wall Slide.png" id="10_yfi7d"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hfphn"]
 radius = 7.0
@@ -20,7 +21,7 @@ radius = 7.0
 height = 14.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n7aby"]
-size = Vector2(10, 28)
+size = Vector2(24, 28)
 
 [sub_resource type="Animation" id="Animation_ratu8"]
 resource_name = "Attack"
@@ -65,7 +66,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pivot/AttackHitbox:disabled")
+tracks/3/path = NodePath("Attack/AttackHitbox:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -118,7 +119,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pivot/AttackHitbox:disabled")
+tracks/3/path = NodePath("Attack/AttackHitbox:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -492,7 +493,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Pivot/AttackHitbox:disabled")
+tracks/3/path = NodePath("Attack/AttackHitbox:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -543,6 +544,45 @@ tracks/2/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_b3dqe"]
+resource_name = "Wall Slide"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_yfi7d")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_14505"]
 _data = {
 &"Attack": SubResource("Animation_ratu8"),
@@ -556,7 +596,8 @@ _data = {
 &"Jump": SubResource("Animation_8sknh"),
 &"Move": SubResource("Animation_s027a"),
 &"RESET": SubResource("Animation_4wcc8"),
-&"Slide": SubResource("Animation_hsamt")
+&"Slide": SubResource("Animation_hsamt"),
+&"WallSlide": SubResource("Animation_b3dqe")
 }
 
 [node name="Player" type="CharacterBody2D" unique_id=1102362985]
@@ -584,12 +625,12 @@ target_position = Vector2(21, 0)
 [node name="UncrouchCheckRayCast" type="RayCast2D" parent="." unique_id=1881639785]
 target_position = Vector2(0, -10)
 
-[node name="Pivot" type="Area2D" parent="." unique_id=1705545241]
+[node name="Attack" type="Area2D" parent="." unique_id=1705545241]
 collision_layer = 4
 collision_mask = 0
 
-[node name="AttackHitbox" type="CollisionShape2D" parent="Pivot" unique_id=202753126]
-position = Vector2(19, 2)
+[node name="AttackHitbox" type="CollisionShape2D" parent="Attack" unique_id=202753126]
+position = Vector2(12, 2)
 shape = SubResource("RectangleShape2D_n7aby")
 disabled = true
 debug_color = Color(1, 0, 0, 0.41960785)
