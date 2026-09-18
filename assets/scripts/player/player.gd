@@ -5,6 +5,7 @@ extends CharacterBody2D
 var speed = 170.0
 var direction: float = 0.0
 const SLIDESPEED = 500.0		# Sliding movement speed. (Not entirely sure why this has to be set so high to do anything)
+const DIVESPEED = 550.0			# Diving movement speed (see above)
 const CRAWLSPEED = 120.0		# Crawling movement speed.
 const MOVESPEED = 170.0			# Normal movement speed.
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
@@ -64,10 +65,14 @@ func _physics_process(delta: float) -> void:
 	# CROUCH=================================================
 	# Toggle for if the player is pressing the crouch input while grounded.
 	
-	if Input.is_action_just_pressed("crouch") and is_on_floor():
-		if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
-			velocity.x = SLIDESPEED * direction
-		is_crouching = true
+	if Input.is_action_just_pressed("crouch"):
+		if is_on_floor():
+			if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
+				velocity.x = SLIDESPEED * direction
+			is_crouching = true
+		else:
+			velocity.x = DIVESPEED * direction
+			velocity.y = 300
 		
 	if (
 		# to make sliding slower or more committal you could make it so you dont stand up until you reach close to crawlspeed (minor buffers are because of lerp btw)
@@ -175,19 +180,25 @@ func _physics_process(delta: float) -> void:
 				animation_player.play("Move")
 			else:
 				animation_player.play("Idle")
+	
+	#=================================================
+	#Moved physics before animation to fix small visual jank
+	move_and_slide()
+	sprite_flip()
 				
 	# If the player is airborne:
 	if not is_on_floor():
+		# if player is moving fast enough to be diving
+		if abs(velocity.x) > MOVESPEED + 20:
+			animation_player.play("DiveKick")
 		# If the player is moving upward:
-		if sign(velocity.y) == -1:
+		elif sign(velocity.y) == -1:
 			animation_player.play("Jump")
 		# If the player is moving upward:
 		else:
 			animation_player.play("FallBeta")
 
-	#=================================================
-	move_and_slide()
-	sprite_flip()
+	
 	
 #============================================================================
 #============================================================================
