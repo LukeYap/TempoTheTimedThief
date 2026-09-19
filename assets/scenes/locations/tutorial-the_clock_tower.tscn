@@ -349,13 +349,6 @@ position = Vector2(1979, 212)
 tile_map_data = PackedByteArray("AADJ/wUAAAAEAAAAAADJ/wYAAAAEAAEAAADK/wUAAAAGAAAAAADK/wYAAAAGAAEAAACP/wYAAAALAAIAAACI/wYAAAALAAIAAACh/wYAAAALAAIAAACv/wYAAAALAAIAAACu/wYAAAALAAIAAACa/wYAAAALAAIAAACL/wYAAAALAAMAAACH/wYAAAALAAMAAACb/wYAAAALAAMAAACk/wYAAAALAAMAAACl/wYAAAALAAMAAACm/wYAAAALAAMAAACz/wYAAAALAAMAAACt/wYAAAALAAMAAAC5/wYAAAAEAAkAAAC6/wYAAAAEAAkAAAC7/wYAAAAEAAkAAAC8/wYAAAAEAAkAAAC9/wYAAAAEAAkAAAC+/wYAAAAEAAkAAAC//wYAAAAEAAkAAADA/wYAAAAEAAkAAADB/wYAAAAEAAkAAADC/wYAAAAEAAkAAADD/wYAAAAEAAkAAAC4/wYAAAADAAkAAADE/wYAAAAFAAkAAAA=")
 tile_set = SubResource("TileSet_ccj0v")
 
-[node name="Small Chest" parent="TileMaps" unique_id=1281172731 instance=ExtResource("12_v4ram")]
-position = Vector2(2237, 120)
-
-[node name="OneWayPlatforms" type="Node2D" parent="." unique_id=1325056306]
-visible = false
-position = Vector2(2259, 308)
-
 [node name="Items" type="Node2D" parent="." unique_id=440015266]
 
 [node name="Jars" type="Node2D" parent="Items" unique_id=1740173317]
@@ -376,6 +369,9 @@ position = Vector2(2531, 188)
 position = Vector2(2517, 204)
 
 [node name="Chests" type="Node2D" parent="Items" unique_id=1937881829]
+
+[node name="Small Chest2" parent="Items/Chests" unique_id=1281172731 instance=ExtResource("12_v4ram")]
+position = Vector2(2237, 120)
 
 [node name="Small Chest" parent="Items/Chests" unique_id=1918717933 instance=ExtResource("12_v4ram")]
 position = Vector2(2091, 216)
