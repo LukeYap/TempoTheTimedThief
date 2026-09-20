@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://blxb3g5ruld6b"]
+
+[ext_resource type="Texture2D" uid="uid://camluhiopuyfy" path="res://assets/sprites/items and interactables/treasure/Basic Treasure.png" id="1_3rkos"]
+[ext_resource type="Script" uid="uid://dtg2n5q5hodya" path="res://assets/scripts/items and interactables/basic_treasure.gd" id="1_5on6c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5on6c"]
+atlas = ExtResource("1_3rkos")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_us1c6"]
+atlas = ExtResource("1_3rkos")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jvort"]
+atlas = ExtResource("1_3rkos")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coh5v"]
+atlas = ExtResource("1_3rkos")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xe3tu"]
+atlas = ExtResource("1_3rkos")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2w5cm"]
+atlas = ExtResource("1_3rkos")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hfphn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5on6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_us1c6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jvort")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coh5v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xe3tu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2w5cm")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hfphn"]
+radius = 2.236068
+
+[node name="BasicTreasure" type="CharacterBody2D" unique_id=1839270639]
+script = ExtResource("1_5on6c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=587964224]
+sprite_frames = SubResource("SpriteFrames_hfphn")
+frame = 5
+
+[node name="Collisions" type="Area2D" parent="." unique_id=1230416676]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collisions" unique_id=2087140428]
+position = Vector2(0, 6)
+shape = SubResource("CircleShape2D_hfphn")
+
+[connection signal="body_entered" from="Collisions" to="." method="_on_collisions_body_entered"]

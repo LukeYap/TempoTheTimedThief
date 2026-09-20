@@ -37,13 +37,12 @@ var walljump_force: float = 500
 @onready var crouchhurtbox: CollisionShape2D = $CrouchHurtbox
 
 # References to attack hitbox.
-@onready var hitbox: CollisionShape2D = $Pivot/AttackHitbox
+@onready var hitbox: CollisionShape2D = $Attack/AttackHitbox
 
 #============================================================================
 
 func _ready():
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
-	#animation_tree.active = true
 	pass
 	
 #============================================================================
@@ -55,7 +54,7 @@ func _physics_process(delta: float) -> void:
 		is_crouching = false				# Player can't crouch mid-air.
 		velocity += get_gravity() * delta	# Apply gravity when airborne.
 		# if wall sliding
-		if is_on_wall_only():
+		if is_on_wall_only() and direction != 0:
 			# tweak wall slide speed
 			velocity.y = clamp(velocity.y, -99999, 80)
 	
@@ -125,12 +124,11 @@ func _physics_process(delta: float) -> void:
 	#WALL JUMP
 	if (
 		is_on_wall_only()
-		#and velocity.x != 0
+		and direction != 0
 		and Input.is_action_just_pressed("jump")
 		):
 		# When raycast scale is -1/1, player is facing left/right.
 		# So wall jump should provide a boost in the opposite direction.
-		print(walljump_raycast.scale.x)
 		velocity.y = JUMP_VELOCITY
 		velocity.x = -(walljump_raycast.scale.x) * walljump_force
 	
@@ -149,7 +147,6 @@ func _physics_process(delta: float) -> void:
 		):
 		is_attacking = true
 		animation_player.play("Attack")
-		#return
 	if is_attacking:
 		return
 	
@@ -197,6 +194,9 @@ func _physics_process(delta: float) -> void:
 		# If the player is moving upward:
 		else:
 			animation_player.play("FallBeta")
+	if is_on_wall_only() and direction != 0:
+		animation_player.play("WallSlide")
+
 
 	
 	
