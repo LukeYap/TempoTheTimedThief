@@ -124,7 +124,6 @@ func _physics_process(delta: float) -> void:
 		):
 		# When raycast scale is -1/1, player is facing left/right.
 		# So wall jump should provide a boost in the opposite direction.
-		print(walljump_raycast.scale.x)
 		velocity.y = JUMP_VELOCITY
 		velocity.x = -(walljump_raycast.scale.x) * walljump_force
 	
