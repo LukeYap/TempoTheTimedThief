@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cf0n15puydccy" path="res://assets/sprites/player/Sheets/Dive Kick.png" id="6_yfi7d"]
 [ext_resource type="Texture2D" uid="uid://cdo2fpeho8hsm" path="res://assets/sprites/player/Sheets/Flip.png" id="7_hsamt"]
 [ext_resource type="Texture2D" uid="uid://1of62oqxee2f" path="res://assets/sprites/player/Sheets/Slide.png" id="9_hyvrl"]
-[ext_resource type="Texture2D" uid="uid://cflnlp3lwu1gh" path="res://assets/sprites/player/Sheets/Wall Slide.png" id="10_yfi7d"]
+[ext_resource type="Texture2D" uid="uid://cflnlp3lwu1gh" path="res://assets/sprites/player/Sheets/Wall Slide.png" id="12_b3dqe"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hfphn"]
 radius = 7.0
@@ -24,6 +24,9 @@ height = 14.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n7aby"]
 size = Vector2(24, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b3dqe"]
+size = Vector2(26, 23)
 
 [sub_resource type="Animation" id="Animation_ratu8"]
 resource_name = "Attack"
@@ -253,8 +256,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_b3dqe"]
-resource_name = "DiveKick"
-length = 0.1
+resource_name = "Wall Slide"
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -291,6 +293,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Dive/DiveBox:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_0gfpk"]
@@ -366,7 +380,7 @@ tracks/2/path = NodePath("Sprite2D:frame")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(-0.033333335),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [1]
@@ -586,6 +600,18 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Dive/DiveBox:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_hsamt"]
 resource_name = "Slide"
@@ -628,8 +654,9 @@ tracks/2/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_b3dqe"]
-resource_name = "Wall Slide"
+[sub_resource type="Animation" id="Animation_q3ml6"]
+resource_name = "WallSlide"
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -640,7 +667,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("10_yfi7d")]
+"values": [ExtResource("12_b3dqe")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -683,10 +710,10 @@ _data = {
 &"Move": SubResource("Animation_s027a"),
 &"RESET": SubResource("Animation_4wcc8"),
 &"Slide": SubResource("Animation_hsamt"),
-&"WallSlide": SubResource("Animation_b3dqe")
+&"WallSlide": SubResource("Animation_q3ml6")
 }
 
-[node name="Player" type="CharacterBody2D" unique_id=1102362985]
+[node name="Player" type="CharacterBody2D" unique_id=1102362985 groups=["player"]]
 script = ExtResource("1_s027a")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2139937811]
@@ -721,6 +748,16 @@ shape = SubResource("RectangleShape2D_n7aby")
 disabled = true
 debug_color = Color(1, 0, 0, 0.41960785)
 
+[node name="Dive" type="Area2D" parent="." unique_id=253117932]
+collision_layer = 4
+collision_mask = 0
+
+[node name="DiveBox" type="CollisionShape2D" parent="Dive" unique_id=1920398503]
+position = Vector2(7, 9.5)
+shape = SubResource("RectangleShape2D_b3dqe")
+disabled = true
+debug_color = Color(0.87820023, 0.33890724, 0, 0.41960785)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1351649107]
 position = Vector2(0, -44)
 zoom = Vector2(3, 3)
@@ -745,4 +782,6 @@ one_shot = true
 [node name="StateMachine" type="Node" parent="." unique_id=1448830558]
 script = ExtResource("5_xvhxs")
 
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="current_animation_changed" from="AnimationPlayer" to="." method="_on_animation_player_current_animation_changed"]
 [connection signal="timeout" from="Timers/BasicAttackCooldown" to="." method="_on_basic_attack_cooldown_timeout"]

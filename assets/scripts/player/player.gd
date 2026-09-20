@@ -70,8 +70,9 @@ func _physics_process(delta: float) -> void:
 				velocity.x = SLIDESPEED * direction
 			is_crouching = true
 		else:
-			velocity.x = DIVESPEED * direction
-			velocity.y = 300
+			if direction != 0:
+				velocity.x = DIVESPEED * direction
+				velocity.y = 300
 		
 	if (
 		# to make sliding slower or more committal you could make it so you dont stand up until you reach close to crawlspeed (minor buffers are because of lerp btw)
@@ -185,15 +186,16 @@ func _physics_process(delta: float) -> void:
 				
 	# If the player is airborne:
 	if not is_on_floor():
-		# if player is moving fast enough to be diving
-		if abs(velocity.x) > MOVESPEED + 20:
-			animation_player.play("DiveKick")
 		# If the player is moving upward:
-		elif sign(velocity.y) == -1:
+		if sign(velocity.y) == -1:
 			animation_player.play("Jump")
 		# If the player is moving upward:
 		else:
-			animation_player.play("FallBeta")
+						# if player is moving fast enough to be diving
+			if abs(velocity.x) > MOVESPEED + 20:
+				animation_player.play("DiveKick")
+			else:
+				animation_player.play("FallBeta")
 	if is_on_wall_only() and direction != 0:
 		animation_player.play("WallSlide")
 
@@ -215,12 +217,16 @@ func sprite_flip():
 		sprite.flip_h = false
 		if sign(hitbox.position.x) == -1:
 			hitbox.position.x *= -1
+		if sign($Dive/DiveBox.position.x) == -1:
+			$Dive/DiveBox.position.x *= -1
 		if sign(walljump_raycast.scale.x) == -1:
 			walljump_raycast.scale.x *= -1
 	elif direction < 0:
 		sprite.flip_h = true
 		if sign(hitbox.position.x) == 1:
 			hitbox.position.x *= -1
+		if sign($Dive/DiveBox.position.x) == 1:
+			$Dive/DiveBox.position.x *= -1
 		if sign(walljump_raycast.scale.x) == 1:
 			walljump_raycast.scale.x *= -1
 		
@@ -231,3 +237,13 @@ func _on_animation_player_animation_finished(animation: StringName) -> void:
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
 		$Timers/BasicAttackCooldown.start()
+	
+
+
+
+func _on_animation_player_current_animation_changed(anim_name: StringName) -> void:
+	if anim_name != "DiveKick":
+		$Dive/DiveBox.disabled = true
+
+func bounce():
+	velocity.y = -300
