@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var player = get_tree().get_first_node_in_group("player")
 # Reference to the AnimationPlayer child node.
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
@@ -8,6 +9,11 @@ extends Node2D
 # and then disappears later.
 func _on_check_for_attack_hitbox_area_entered(area: Area2D) -> void:
 	if area.name == "Attack":
+		animation_player.play("Broken")
+		await animation_player.animation_finished
+		queue_free()
+	if area.name == "Dive":
+		player.bounce()
 		animation_player.play("Broken")
 		await animation_player.animation_finished
 		queue_free()
