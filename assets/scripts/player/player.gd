@@ -2,12 +2,12 @@ extends CharacterBody2D
 
 #============================================================================
 
-var speed = 170.0
+var speed = 200.0
 var direction: float = 0.0
 const SLIDESPEED = 500.0		# Sliding movement speed. (Not entirely sure why this has to be set so high to do anything)
 const DIVESPEED = 550.0			# Diving movement speed (see above)
 const CRAWLSPEED = 120.0		# Crawling movement speed.
-const MOVESPEED = 170.0			# Normal movement speed.
+const MOVESPEED = 200.0			# Normal movement speed.
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
 
 const ACCEL = 0.15
@@ -194,7 +194,7 @@ func _physics_process(delta: float) -> void:
 		# If the player is moving upward:
 		else:
 			animation_player.play("FallBeta")
-	if is_on_wall_only() and direction != 0:
+	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
 
 

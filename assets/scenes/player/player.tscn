@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cf0n15puydccy" path="res://assets/sprites/player/Sheets/Dive Kick.png" id="6_yfi7d"]
 [ext_resource type="Texture2D" uid="uid://cdo2fpeho8hsm" path="res://assets/sprites/player/Sheets/Flip.png" id="7_hsamt"]
 [ext_resource type="Texture2D" uid="uid://1of62oqxee2f" path="res://assets/sprites/player/Sheets/Slide.png" id="9_hyvrl"]
-[ext_resource type="Texture2D" uid="uid://cflnlp3lwu1gh" path="res://assets/sprites/player/Sheets/Wall Slide.png" id="10_yfi7d"]
+[ext_resource type="Texture2D" uid="uid://cflnlp3lwu1gh" path="res://assets/sprites/player/Sheets/Wall Slide.png" id="12_b3dqe"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hfphn"]
 radius = 7.0
@@ -253,9 +253,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_b3dqe"]
-resource_name = "DiveKick"
-length = 0.1
-step = 0.1
+resource_name = "Dive Kick"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -628,8 +626,8 @@ tracks/2/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_b3dqe"]
-resource_name = "Wall Slide"
+[sub_resource type="Animation" id="Animation_q3ml6"]
+resource_name = "WallSlide"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -640,7 +638,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("10_yfi7d")]
+"values": [ExtResource("12_b3dqe")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -683,7 +681,7 @@ _data = {
 &"Move": SubResource("Animation_s027a"),
 &"RESET": SubResource("Animation_4wcc8"),
 &"Slide": SubResource("Animation_hsamt"),
-&"WallSlide": SubResource("Animation_b3dqe")
+&"WallSlide": SubResource("Animation_q3ml6")
 }
 
 [node name="Player" type="CharacterBody2D" unique_id=1102362985]
