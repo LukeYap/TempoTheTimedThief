@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dt6yirpu2vhpl" path="res://assets/scenes/items and interactables/breakable_block.tscn" id="10_b1n4a"]
 [ext_resource type="PackedScene" uid="uid://bffjflymij2ds" path="res://assets/scenes/items and interactables/treasure/large_chest.tscn" id="10_jfhiy"]
 [ext_resource type="PackedScene" uid="uid://be5rj117wlehy" path="res://assets/scenes/items and interactables/treasure/small_chest.tscn" id="12_v4ram"]
+[ext_resource type="PackedScene" uid="uid://d3xqegya7ip7y" path="res://assets/scenes/enemies/sand_shifter.tscn" id="13_b1n4a"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f7kk0"]
 atlas = ExtResource("1_wjfwt")
@@ -407,6 +408,11 @@ debug_color = Color(0.5921569, 0.40784314, 1, 0.41960785)
 
 [node name="Marker2D" type="Marker2D" parent="DoorZone" unique_id=256711485]
 position = Vector2(832, 0)
+
+[node name="Enemies" type="Node" parent="." unique_id=581430329]
+
+[node name="Sand Shifter" parent="Enemies" unique_id=134670485 instance=ExtResource("13_b1n4a")]
+position = Vector2(2293, 230)
 
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_tgljw")]
 position = Vector2(2130, 212)
