@@ -2,12 +2,14 @@ extends CharacterBody2D
 
 #============================================================================
 
-var speed = 170.0
+var speed = 200.0
 var direction: float = 0.0
+var curr_health: int
+
 const SLIDESPEED = 500.0		# Sliding movement speed. (Not entirely sure why this has to be set so high to do anything)
 const DIVESPEED = 550.0			# Diving movement speed (see above)
 const CRAWLSPEED = 120.0		# Crawling movement speed.
-const MOVESPEED = 170.0			# Normal movement speed.
+const MOVESPEED = 200.0			# Normal movement speed.
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
 
 const ACCEL = 0.15
@@ -32,17 +34,19 @@ var walljump_force: float = 500
 
 @onready var uncrouchcheck_raycast: RayCast2D = $UncrouchCheckRayCast
 
-# Reference to hurtboxes.
-@onready var hurtbox: CollisionShape2D = $PlayerHurtbox
+# Reference to collision boxes.
+@onready var collisionbox: CollisionShape2D = $PlayerCollisionBox
 @onready var crouchhurtbox: CollisionShape2D = $CrouchHurtbox
 
 # References to attack hitbox.
 @onready var hitbox: CollisionShape2D = $Attack/AttackHitbox
-
+@onready var hurtbox: CollisionShape2D = $Hurtbox/PlayerHurtbox
 #============================================================================
 
 func _ready():
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
+	
+	curr_health = 100
 	pass
 	
 #============================================================================
@@ -84,11 +88,11 @@ func _physics_process(delta: float) -> void:
 		is_crouching = false
 	if is_crouching:
 		speed = CRAWLSPEED
-		hurtbox.disabled = true
+		collisionbox.disabled = true
 		crouchhurtbox.disabled = false
 	else:
 		speed = MOVESPEED
-		hurtbox.disabled = false
+		collisionbox.disabled = false
 		crouchhurtbox.disabled = true
 		
 	# Coyote time logic.
@@ -199,16 +203,11 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall_only() and direction != 0:
 		animation_player.play("WallSlide")
 
-
-	
-	
 #============================================================================
 #============================================================================
 #============================================================================
 
 func sprite_flip():
-	#animation_tree.set("parameters/Move/blend_position", direction)
-	
 	# Logic to reverse sprite based on x direction.
 	# Tempo's sprites face right by default.
 	# Also, this reverse the position of the attack hitbox to match
@@ -230,7 +229,11 @@ func sprite_flip():
 		if sign(walljump_raycast.scale.x) == 1:
 			walljump_raycast.scale.x *= -1
 		
-# After finishing the attack animation, return normal controls.
+#============================================================================
+#============================================================================
+#============================================================================
+		
+# After finishing an attack animation, return normal controls.
 func _on_animation_player_animation_finished(animation: StringName) -> void:
 	if animation == "Attack":
 		is_attacking = false
@@ -247,3 +250,31 @@ func _on_animation_player_current_animation_changed(anim_name: StringName) -> vo
 
 func bounce():
 	velocity.y = -300
+		
+#============================================================================
+#============================================================================
+#============================================================================
+
+func _on_hurtbox_area_entered(area: Area2D) -> void:
+	if area is damageArea:
+		print("OI!")
+		animation_player.play("Damaged")
+		take_damage(area.damage, area.global_position, area.knock_force)
+	
+func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
+	curr_health -= amount
+	print("Taking damage")
+	var knock_dir: Vector2 = (global_position - hazard_pos).normalized()
+
+	velocity = knock_dir * knockback
+	if curr_health <= 0:
+		die()
+
+func die() -> void:
+	queue_free()
+
+
+func enter_slow_zone() -> void:
+	print("hi")
+func exit_slow_zone() -> void:	
+	print("bye")

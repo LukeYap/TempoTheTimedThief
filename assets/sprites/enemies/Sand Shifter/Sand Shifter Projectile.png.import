@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dilcy28u43j5l"
-path="res://.godot/imported/Tileset.png-790fe2578093b44d6dc7185429dbcd73.ctex"
+uid="uid://d1epxq8wbmiod"
+path="res://.godot/imported/Sand Shifter Projectile.png-873f1e9f25629da5196e4cfe9823d8f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/tilesets/Tileset.png"
-dest_files=["res://.godot/imported/Tileset.png-790fe2578093b44d6dc7185429dbcd73.ctex"]
+source_file="res://assets/sprites/enemies/Sand Shifter/Sand Shifter Projectile.png"
+dest_files=["res://.godot/imported/Sand Shifter Projectile.png-873f1e9f25629da5196e4cfe9823d8f9.ctex"]
 
 [params]
 
