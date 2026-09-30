@@ -70,8 +70,7 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
-			if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
-				velocity.x = SLIDESPEED * direction
+
 			is_crouching = true
 		else:
 			if direction != 0:
@@ -136,7 +135,8 @@ func _physics_process(delta: float) -> void:
 		# So wall jump should provide a boost in the opposite direction.
 		velocity.y = JUMP_VELOCITY
 		velocity.x = -(walljump_raycast.scale.x) * walljump_force
-	
+	if Input.is_action_just_pressed("jump") and direction and is_crouching and abs(velocity.x) < CRAWLSPEED + 5.0:
+		velocity.x = SLIDESPEED * direction
 	
 	# ATTACK=================================================
 	if (
