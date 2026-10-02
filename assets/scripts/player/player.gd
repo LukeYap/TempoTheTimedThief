@@ -58,7 +58,8 @@ var walljump_force: float = 500
 #================READY================
 func _ready():
 	# This helps detect when a player animation finishes.
-	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
+	# this is already connected?
+#	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
 	
 	# List of visual effects.
 	# Certain criteria may change these to true
