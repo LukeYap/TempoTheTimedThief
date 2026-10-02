@@ -58,7 +58,8 @@ var walljump_force: float = 500
 #================READY================
 func _ready():
 	# This helps detect when a player animation finishes.
-	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
+	# this is already connected?
+#	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
 	
 	# List of visual effects.
 	# Certain criteria may change these to true
@@ -84,12 +85,9 @@ func _physics_process(delta: float) -> void:
 	# The player can only crouch while grounded.
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
-			if direction and (not is_crouching or abs(velocity.x) < CRAWLSPEED + 5.0):
-				velocity.x = SLIDESPEED * direction
+
 			is_crouching = true
-		else:
-			velocity.x = DIVESPEED * direction
-			velocity.y = 300
+
 		
 	if (
 		# to make sliding slower or more committal you
@@ -142,6 +140,10 @@ func _physics_process(delta: float) -> void:
 		# So wall jump should provide a boost in the opposite direction.
 		velocity.y = JUMP_VELOCITY
 		velocity.x = -(walljump_raycast.scale.x) * walljump_force
+	if Input.is_action_just_pressed("jump") and direction and is_crouching and abs(velocity.x) < CRAWLSPEED + 5.0:
+		velocity.x = SLIDESPEED * direction
+	
+	# ATTACK=================================================
 	
 #================COYOTE TIME================
 # If the player is grounded and the coyote time window is active,
@@ -161,7 +163,7 @@ func _physics_process(delta: float) -> void:
 # not be crouching, not be airborne,
 # and the cooldown time on the basic attack needs to be finished.
 	if (
-		Input.is_action_pressed("attack")
+		Input.is_action_just_pressed("attack")
 		and not is_attacking
 		and not is_crouching
 		and is_on_floor()
@@ -170,6 +172,10 @@ func _physics_process(delta: float) -> void:
 		is_attacking = true
 		animation_player.play("Attack")
 		AudioManager.play_attack()
+	#moved the divekick here
+	if (Input.is_action_just_pressed("attack") and not is_on_floor()) and direction != 0:
+		velocity.x = DIVESPEED * direction
+		velocity.y = 300
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
 	if is_attacking:
@@ -213,16 +219,17 @@ func _physics_process(delta: float) -> void:
 				
 	# If the player is airborne:
 	if not is_on_floor():
-		# if player is moving fast enough to be diving
-		if abs(velocity.x) > MOVESPEED + 20:
-			animation_player.play("DiveKick")
 		# If the player is moving upward:
-		elif sign(velocity.y) == -1:
+		if sign(velocity.y) == -1:
 			animation_player.play("Jump")
 		# If the player is moving upward:
 		else:
-			animation_player.play("FallBeta")
-	if is_on_wall_only() and velocity.y > 0 and direction != 0:
+						# if player is moving fast enough to be diving
+			if abs(velocity.x) > MOVESPEED + 20:
+				animation_player.play("DiveKick")
+			else:
+				animation_player.play("FallBeta")
+	if is_on_wall_only() and direction != 0:
 		animation_player.play("WallSlide")
 		
 #================PROCESS================
@@ -244,12 +251,16 @@ func sprite_flip():
 		sprite.flip_h = false
 		if sign(hitbox.position.x) == -1:
 			hitbox.position.x *= -1
+		if sign($Dive/DiveBox.position.x) == -1:
+			$Dive/DiveBox.position.x *= -1
 		if sign(walljump_raycast.scale.x) == -1:
 			walljump_raycast.scale.x *= -1
 	elif direction < 0:
 		sprite.flip_h = true
 		if sign(hitbox.position.x) == 1:
 			hitbox.position.x *= -1
+		if sign($Dive/DiveBox.position.x) == 1:
+			$Dive/DiveBox.position.x *= -1
 		if sign(walljump_raycast.scale.x) == 1:
 			walljump_raycast.scale.x *= -1
 		
@@ -261,6 +272,16 @@ func _on_animation_player_animation_finished(animation: StringName) -> void:
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
 		$Timers/BasicAttackCooldown.start()
+	
+
+
+
+func _on_animation_player_current_animation_changed(anim_name: StringName) -> void:
+	if anim_name != "DiveKick":
+		$Dive/DiveBox.disabled = true
+
+func bounce():
+	velocity.y = -300
 		
 #================SLOW ZONE================
 # Upon entering a slow zone hazard, Tempo's movement speeed should be
