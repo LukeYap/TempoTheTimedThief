@@ -8,7 +8,7 @@ extends Node2D
 # the block enters its broken animation for 0.5 seconds
 # and then disappears later.
 func _on_check_for_attack_hitbox_area_entered(area: Area2D) -> void:
-	if area.name == "Attack" or area.name == "DiveKick":
+	if area.name == "Attack" or area.name == "DiveKick" or area.name == "Head":
 		if area.name == "DiveKick":
 			area.get_parent().dive_bounce()
 		AudioManager.play_break_block()
