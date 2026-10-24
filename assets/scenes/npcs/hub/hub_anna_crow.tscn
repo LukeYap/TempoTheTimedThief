@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://bjk6q4ncx4uyg"]
+
+[ext_resource type="Texture2D" uid="uid://cdngsd1442nlv" path="res://assets/sprites/npcs/Anna Crow/Anna Crow.png" id="1_oihj0"]
+[ext_resource type="Texture2D" uid="uid://clwakqmwhbrnr" path="res://assets/sprites/items and interactables/Interact Arrow.png" id="2_f21p3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hfphn"]
+size = Vector2(19, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f21p3"]
+atlas = ExtResource("1_oihj0")
+region = Rect2(0, 0, 32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_er6f6"]
+atlas = ExtResource("1_oihj0")
+region = Rect2(32, 0, 32, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_er6f6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f21p3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_er6f6")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 0.7
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e4jco"]
+size = Vector2(33, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gov6"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3um8"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyj5x"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8ilk"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynkm7"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ol56"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7oqf"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m4vrd"]
+atlas = ExtResource("2_f21p3")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_62ltm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gov6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3um8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyj5x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8ilk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ynkm7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ol56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h7oqf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m4vrd")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="HubAnnaCrow" type="CharacterBody2D" unique_id=1988943923]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=351275170]
+position = Vector2(0.5, -1)
+shape = SubResource("RectangleShape2D_hfphn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=929612225]
+sprite_frames = SubResource("SpriteFrames_er6f6")
+autoplay = "default"
+frame_progress = 0.13102719
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1248080880]
+collision_layer = 0
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea" unique_id=1234382708]
+position = Vector2(7.5, -1)
+shape = SubResource("RectangleShape2D_e4jco")
+debug_color = Color(0, 1, 0.4333334, 0.41960785)
+
+[node name="InteractArrow" type="AnimatedSprite2D" parent="." unique_id=1475635141]
+position = Vector2(0, -23)
+sprite_frames = SubResource("SpriteFrames_62ltm")
+autoplay = "default"

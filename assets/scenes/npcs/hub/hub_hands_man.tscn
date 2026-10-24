@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://dot4y576dddh4"]
+
+[ext_resource type="Texture2D" uid="uid://bftcdlq5ke77n" path="res://assets/sprites/npcs/Hands Man/Hands Man.png" id="1_c7xy3"]
+[ext_resource type="Texture2D" uid="uid://clwakqmwhbrnr" path="res://assets/sprites/items and interactables/Interact Arrow.png" id="2_scxgw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ptw4"]
+atlas = ExtResource("1_c7xy3")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wuabi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ptw4")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6vx7"]
+size = Vector2(32, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gov6"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3um8"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyj5x"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8ilk"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynkm7"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ol56"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7oqf"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m4vrd"]
+atlas = ExtResource("2_scxgw")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xf33g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gov6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3um8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyj5x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8ilk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ynkm7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ol56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h7oqf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m4vrd")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="HubHandsMan" type="CharacterBody2D" unique_id=671707029]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=41147965]
+sprite_frames = SubResource("SpriteFrames_wuabi")
+autoplay = "default"
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1685144319]
+collision_layer = 0
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea" unique_id=899901385]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_v6vx7")
+debug_color = Color(0, 1, 0.4333334, 0.41960785)
+
+[node name="InteractArrow" type="AnimatedSprite2D" parent="." unique_id=1382039509]
+position = Vector2(0, -23)
+sprite_frames = SubResource("SpriteFrames_xf33g")
+autoplay = "default"

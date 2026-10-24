@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://bx5ini3esio3c"]
+
+[ext_resource type="Texture2D" uid="uid://byttxk2teirlb" path="res://assets/sprites/npcs/Atto/Idle.png" id="1_7ocgq"]
+[ext_resource type="Script" uid="uid://cf5uxhtgt8w5i" path="res://assets/scripts/npcs/hub_atto.gd" id="1_e2ioy"]
+[ext_resource type="Texture2D" uid="uid://clwakqmwhbrnr" path="res://assets/sprites/items and interactables/Interact Arrow.png" id="2_e2ioy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iifgl"]
+atlas = ExtResource("1_7ocgq")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3xhd6"]
+atlas = ExtResource("1_7ocgq")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8kt0a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iifgl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3xhd6")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4204i"]
+size = Vector2(32, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gov6"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w3um8"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyj5x"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8ilk"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynkm7"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ol56"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7oqf"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m4vrd"]
+atlas = ExtResource("2_e2ioy")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rll4s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gov6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w3um8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyj5x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8ilk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ynkm7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ol56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h7oqf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m4vrd")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="HubAtto" type="CharacterBody2D" unique_id=2040366194]
+script = ExtResource("1_e2ioy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=27709978]
+sprite_frames = SubResource("SpriteFrames_8kt0a")
+autoplay = "default"
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=905108835]
+collision_layer = 0
+
+[node name="DetectionShape" type="CollisionShape2D" parent="DetectionArea" unique_id=1467789971]
+position = Vector2(0, 12)
+shape = SubResource("RectangleShape2D_4204i")
+debug_color = Color(0, 1, 0.4333334, 0.41960785)
+
+[node name="InteractArrow" type="AnimatedSprite2D" parent="." unique_id=1336322086]
+position = Vector2(0, -23)
+sprite_frames = SubResource("SpriteFrames_rll4s")
+autoplay = "default"

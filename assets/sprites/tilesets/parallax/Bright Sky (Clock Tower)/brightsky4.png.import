@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhficdfkx4obu"
-path="res://.godot/imported/nightsky1.png-c1f11e80c88b95dbd1f7cbe907605429.ctex"
+uid="uid://c7v8j4dn5tf0f"
+path="res://.godot/imported/brightsky4.png-0fe18b1ef52b76c2b89029025633d935.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky1.png"
-dest_files=["res://.godot/imported/nightsky1.png-c1f11e80c88b95dbd1f7cbe907605429.ctex"]
+source_file="res://assets/sprites/tilesets/parallax/Bright Sky (Clock Tower)/brightsky4.png"
+dest_files=["res://.godot/imported/brightsky4.png-0fe18b1ef52b76c2b89029025633d935.ctex"]
 
 [params]
 

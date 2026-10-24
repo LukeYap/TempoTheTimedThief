@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dguxq58skldu"
-path="res://.godot/imported/nightsky4.png-95a8553b027dc6f6e693e7820a730541.ctex"
+uid="uid://cdngsd1442nlv"
+path="res://.godot/imported/Anna Crow.png-0e184d3811e36914e522f0bd2df82f79.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky4.png"
-dest_files=["res://.godot/imported/nightsky4.png-95a8553b027dc6f6e693e7820a730541.ctex"]
+source_file="res://assets/sprites/npcs/Anna Crow/Anna Crow.png"
+dest_files=["res://.godot/imported/Anna Crow.png-0e184d3811e36914e522f0bd2df82f79.ctex"]
 
 [params]
 

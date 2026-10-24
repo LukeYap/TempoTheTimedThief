@@ -4,17 +4,17 @@
 [ext_resource type="Script" uid="uid://cpj0ms1j1u6eh" path="res://assets/scripts/other/screenie.gd" id="1_q123d"]
 [ext_resource type="PackedScene" uid="uid://bcoj2t6rvvmf2" path="res://assets/scenes/ui/hud.tscn" id="1_t8rwm"]
 [ext_resource type="Texture2D" uid="uid://cwk1pyg1q2jj0" path="res://assets/sprites/tilesets/Tileset (Clock Tower).png" id="1_tgljw"]
-[ext_resource type="Texture2D" uid="uid://bqlc78ifltdma" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky0.png" id="1_txix4"]
-[ext_resource type="Texture2D" uid="uid://dhficdfkx4obu" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky1.png" id="1_wjfwt"]
-[ext_resource type="Texture2D" uid="uid://bxugurocllgqv" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky2.png" id="2_1juxl"]
+[ext_resource type="Texture2D" uid="uid://bqlc78ifltdma" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky0.png" id="1_txix4"]
+[ext_resource type="Texture2D" uid="uid://dhficdfkx4obu" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky1.png" id="1_wjfwt"]
+[ext_resource type="Texture2D" uid="uid://bxugurocllgqv" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky2.png" id="2_1juxl"]
 [ext_resource type="PackedScene" uid="uid://dt408k2a66tfs" path="res://assets/scenes/player/player.tscn" id="2_tgljw"]
-[ext_resource type="Texture2D" uid="uid://b5twaj0mc6huk" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky3.png" id="3_ait4n"]
-[ext_resource type="Texture2D" uid="uid://dguxq58skldu" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky4.png" id="4_8kvfs"]
-[ext_resource type="Texture2D" uid="uid://c116ytmq75ai7" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky5.png" id="5_gwx0n"]
+[ext_resource type="Texture2D" uid="uid://b5twaj0mc6huk" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky3.png" id="3_ait4n"]
+[ext_resource type="Texture2D" uid="uid://dguxq58skldu" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky4.png" id="4_8kvfs"]
+[ext_resource type="Texture2D" uid="uid://c116ytmq75ai7" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky5.png" id="5_gwx0n"]
 [ext_resource type="PackedScene" uid="uid://mq0eiacgc11w" path="res://assets/scenes/items and interactables/treasure/small_jar.tscn" id="8_1juxl"]
-[ext_resource type="Texture2D" uid="uid://cdx5ex07tx620" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky6.png" id="8_2eq7y"]
+[ext_resource type="Texture2D" uid="uid://cdx5ex07tx620" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky6.png" id="8_2eq7y"]
 [ext_resource type="PackedScene" uid="uid://8edk5duv1clf" path="res://assets/scenes/npcs/little_guy.tscn" id="9_ait4n"]
-[ext_resource type="Texture2D" uid="uid://b1v40nctl38u2" path="res://assets/sprites/tilesets/parallax/Clock Tower/nightsky7.png" id="9_fntbi"]
+[ext_resource type="Texture2D" uid="uid://b1v40nctl38u2" path="res://assets/sprites/tilesets/parallax/Night Sky (Clock Tower)/nightsky7.png" id="9_fntbi"]
 [ext_resource type="PackedScene" uid="uid://70ara05dw35v" path="res://assets/scenes/items and interactables/zones/door_zone.tscn" id="10_8kvfs"]
 [ext_resource type="PackedScene" uid="uid://dt6yirpu2vhpl" path="res://assets/scenes/items and interactables/breakable_block.tscn" id="10_b1n4a"]
 [ext_resource type="PackedScene" uid="uid://bffjflymij2ds" path="res://assets/scenes/items and interactables/treasure/large_chest.tscn" id="10_jfhiy"]
@@ -31,12 +31,13 @@
 [ext_resource type="PackedScene" uid="uid://cd4vyp074qyrc" path="res://assets/scenes/items and interactables/key/key.tscn" id="25_2eq7y"]
 [ext_resource type="PackedScene" uid="uid://byqjhoip26y05" path="res://assets/scenes/npcs/basic_npc.tscn" id="25_bij3n"]
 [ext_resource type="PackedScene" uid="uid://calfhx4sco608" path="res://assets/scenes/enemies/bombodoro.tscn" id="27_cthdf"]
+[ext_resource type="Script" uid="uid://dv755fx0lvkqg" path="res://assets/scripts/other/basic_npc.gd" id="27_x8lr0"]
 [ext_resource type="Texture2D" uid="uid://dhvfdc06q8vqq" path="res://assets/sprites/tilesets/gj.png" id="31_1tiuq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f7kk0"]
 atlas = ExtResource("1_wjfwt")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wjfwt"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q123d"]
 texture = ExtResource("1_tgljw")
 6:4/0 = 0
 7:4/0 = 0
@@ -146,9 +147,9 @@ texture = ExtResource("1_tgljw")
 7:3/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_wjfwt"]
-sources/0 = SubResource("TileSetAtlasSource_wjfwt")
+sources/0 = SubResource("TileSetAtlasSource_q123d")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wxus5"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x8lr0"]
 texture = ExtResource("1_tgljw")
 0:20/0 = 0
 0:21/0 = 0
@@ -237,9 +238,9 @@ texture = ExtResource("1_tgljw")
 0:17/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_ysy5o"]
-sources/0 = SubResource("TileSetAtlasSource_wxus5")
+sources/0 = SubResource("TileSetAtlasSource_x8lr0")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_airaa"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5n7c2"]
 texture = ExtResource("1_tgljw")
 1:2/0 = 0
 1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -470,9 +471,9 @@ texture = ExtResource("1_tgljw")
 
 [sub_resource type="TileSet" id="TileSet_hfphn"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_airaa")
+sources/0 = SubResource("TileSetAtlasSource_5n7c2")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1juxl"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bcw1y"]
 texture = ExtResource("1_tgljw")
 4:0/0 = 0
 5:0/0 = 0
@@ -528,7 +529,7 @@ texture = ExtResource("1_tgljw")
 0:13/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_ccj0v"]
-sources/0 = SubResource("TileSetAtlasSource_1juxl")
+sources/0 = SubResource("TileSetAtlasSource_bcw1y")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ysy5o"]
 size = Vector2(128, 7)
@@ -1245,6 +1246,7 @@ autoplay = "default"
 
 [node name="BasicNPC" parent="NPCs" unique_id=1950217086 instance=ExtResource("25_bij3n")]
 position = Vector2(2397, -596)
+script = ExtResource("27_x8lr0")
 
 [node name="Enemies" type="Node2D" parent="." unique_id=820822134]
 
