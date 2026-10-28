@@ -198,8 +198,7 @@ func _physics_process(delta: float) -> void:
 		and Input.is_action_pressed("crouch")
 		):
 		is_divekicking = true
-		if direction:
-			velocity.x = DIVESPEED * direction
+		velocity.x = DIVESPEED * sign(hitbox.position.x)
 		velocity.y = 300
 				
 		AudioManager.play_divekick()
@@ -282,8 +281,6 @@ func _physics_process(delta: float) -> void:
 	# Disable hitboxes once animations are finished.
 	if animation_player.current_animation != "DiveKick":
 		$DiveKick/DiveHitbox.disabled = true
-	if animation_player.current_animation != "DiveKick Straight":
-		$DiveKick/DiveStraightHitbox.disabled = true
 
 #================PROCESS================
 func _process(delta: float) -> void:
@@ -332,7 +329,7 @@ func _on_animation_player_animation_finished(animation: StringName) -> void:
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
 		$Timers/BasicAttackCooldown.start()
-	if animation == "DiveKick" or "DiveKick Straight":
+	if animation == "DiveKick":
 		is_divekicking = false
 		
 #================SLOW ZONE================
