@@ -841,10 +841,28 @@ tracks/0/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_f0e17"]
+resource_name = "Time Flash"
+length = 3.0000000000000004
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/Enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3000001, 1.4, 1.5, 1.6, 1.6999999, 1.8000001, 1.9, 2.0000002, 2.1000001, 2.2000003, 2.3000002, 2.4000003, 2.5000002, 2.6000004, 2.7000003, 2.8000002, 2.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jf6n8"]
 _data = {
 &"Hit Flash": SubResource("Animation_2tf2h"),
-&"RESET": SubResource("Animation_rrkuk")
+&"RESET": SubResource("Animation_rrkuk"),
+&"Time Flash": SubResource("Animation_f0e17")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_svfgx"]
