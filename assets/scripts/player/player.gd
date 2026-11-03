@@ -91,16 +91,20 @@ func _physics_process(delta: float) -> void:
 		fx_move.visible = false
 		return
 	
-	# Gravity and wall slide.
+#================GRAVITY================
 	if not is_on_floor():
 		is_crouching = false				
 		velocity += get_gravity() * delta
-		# if wall sliding
+
+#================WALL SLIDE================
 		if is_on_wall_only() and direction != 0:
 			# tweak wall slide speed
+			velocity.y = clamp(velocity.y, -99999, 80)
+			
 			fx_wallslide.play()
 			fx_wallslide.visible = true
-			velocity.y = clamp(velocity.y, -99999, 80)
+	
+	# Stop wallslide VFX when player leaves wall cling.
 	if not is_on_wall_only():
 		fx_wallslide.stop()
 		fx_wallslide.visible = false
@@ -193,18 +197,25 @@ func _physics_process(delta: float) -> void:
 		is_attacking = true
 		animation_player.play("Attack")
 		AudioManager.play_attack()
+		
 #================DIVE KICK================
 	if (
 		Input.is_action_just_pressed("attack") 
 		and not is_on_floor() 
-		and Input.is_action_pressed("crouch")
 		):
-		is_divekicking = true
-		velocity.x = DIVESPEED * sign(hitbox.position.x)
-		velocity.y = 300
-				
-		AudioManager.play_divekick()
-		$Timers/HurtCooldown.start(0.1)
+		if (
+			Input.is_action_pressed("crouch")
+		):
+			#is_divekicking = true
+			velocity.x = DIVESPEED * sign(hitbox.position.x)
+			velocity.y = 300
+					
+			AudioManager.play_divekick()
+		else:
+			is_attacking = true
+			animation_player.play("Air Attack")
+			AudioManager.play_attack()
+			$Timers/HurtCooldown.start(0.1)
 		
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
@@ -240,12 +251,15 @@ func _physics_process(delta: float) -> void:
 			fx_move.visible = false
 			# If the player is moving while crouching:
 			if direction:
-				if abs(velocity.x) < CRAWLSPEED + 10.0:
-					animation_player.play("Crawl")
 				if animation_player.current_animation == "Slide":
 					animation_player.play("Slide")
-				else:
-					animation_player.play("Crawl")
+				
+				#if abs(velocity.x) < CRAWLSPEED + 10.0:
+					#animation_player.play("Crawl")
+				#if animation_player.current_animation == "Slide":
+					#animation_player.play("Slide")
+				#else:
+					#animation_player.play("Crawl")
 			else:
 				animation_player.play("CrouchBeta")
 		# If the player is not crouching:
@@ -331,13 +345,13 @@ func sprite_flip():
 #================FINISH ANIMATION================
 # After finishing an attack animation, return normal controls.
 func _on_animation_player_animation_finished(animation: StringName) -> void:
-	if animation == "Attack":
+	if animation == "Attack" or "Air Attack" or "DiveKick":
 		is_attacking = false
+		
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
-		$Timers/BasicAttackCooldown.start()
-	if animation == "DiveKick":
-		is_divekicking = false
+		if animation == "Attack":
+			$Timers/BasicAttackCooldown.start()
 		
 #================SLOW ZONE================
 # Upon entering a slow zone hazard, Tempo's movement speeed should be

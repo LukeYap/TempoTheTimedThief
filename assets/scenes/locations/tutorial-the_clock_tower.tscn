@@ -574,7 +574,6 @@ script = ExtResource("1_q123d")
 [node name="HUD" parent="CanvasLayer" unique_id=1669747353 instance=ExtResource("1_t8rwm")]
 
 [node name="Level Timer" parent="CanvasLayer" unique_id=929770682 instance=ExtResource("1_nu17j")]
-visible = false
 position = Vector2(65, 50)
 scale = Vector2(3, 3)
 totalleveltime = 360.0

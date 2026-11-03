@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c51eespmx4csm" path="res://assets/scripts/ui/hud.gd" id="1_1m4ne"]
 [ext_resource type="Texture2D" uid="uid://b1bn37i0kxmul" path="res://assets/sprites/ui/HUD Icons.png" id="1_7fvg5"]
+[ext_resource type="Texture2D" uid="uid://lpmxiqkuxktb" path="res://assets/sprites/ui/HUD.png" id="2_nllkp"]
 [ext_resource type="FontFile" uid="uid://myucyoksi71d" path="res://assets/miscellaneous/fonts/static/PixelifySans-Regular.ttf" id="4_nllkp"]
 
 [node name="HUD" type="Control" unique_id=1669747353]
@@ -13,7 +14,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1m4ne")
 
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=899896653]
+texture = ExtResource("2_nllkp")
+centered = false
+
 [node name="Treasure" type="Control" parent="." unique_id=1464377729]
+visible = false
 anchors_preset = 0
 offset_left = 29.0
 offset_top = 33.0
@@ -38,6 +44,7 @@ theme_override_fonts/font = ExtResource("4_nllkp")
 text = "0"
 
 [node name="Keys" type="Control" parent="." unique_id=802645463]
+visible = false
 anchors_preset = 0
 offset_left = 29.0
 offset_top = 4.0
@@ -63,6 +70,7 @@ theme_override_fonts/font = ExtResource("4_nllkp")
 text = "0"
 
 [node name="Artifacts" type="Control" parent="." unique_id=1571241172]
+visible = false
 anchors_preset = 0
 offset_left = 29.0
 offset_top = -18.0
