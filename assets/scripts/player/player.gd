@@ -58,6 +58,7 @@ var walljump_force: float = 500
 @onready var fx_slow: AnimatedSprite2D = $VisualEffects/FX_Slow
 @onready var fx_wallslide: AnimatedSprite2D = $VisualEffects/FX_WallSlide
 
+@onready var level_timer = get_tree().get_first_node_in_group("level_timer")
 #================PRELOADS================
 var fx_dki = preload("res://assets/scenes/miscellaneous/fx_divekick_impact.tscn")
 
@@ -224,11 +225,12 @@ func _physics_process(delta: float) -> void:
 	
 	if (Input.is_action_just_pressed("timepower1") and not is_attacking
 		and not is_crouching):
+			level_timer.remove_time(5)
 			timeboost = 1.8
 			hitflash_player.play("Time Flash")
 			$Timers/HurtCooldown.start(3)
 			get_tree().create_timer(3.0).timeout.connect(func(): timeboost = 1.0)
-
+			
 	
 	
 	
