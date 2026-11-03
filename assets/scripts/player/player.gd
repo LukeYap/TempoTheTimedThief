@@ -20,6 +20,8 @@ const FRICTION = 0.2
 # This variable changes based on certain zones. Default 1.
 # Ex. A slow zone should have this factor set to 0.5.
 var SPEEDFACTOR = 1
+#like the ohter thing, but for time powers
+var timeboost = 1
 
 var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
@@ -56,6 +58,7 @@ var walljump_force: float = 500
 @onready var fx_slow: AnimatedSprite2D = $VisualEffects/FX_Slow
 @onready var fx_wallslide: AnimatedSprite2D = $VisualEffects/FX_WallSlide
 
+@onready var level_timer = get_tree().get_first_node_in_group("level_timer")
 #================PRELOADS================
 var fx_dki = preload("res://assets/scenes/miscellaneous/fx_divekick_impact.tscn")
 
@@ -123,11 +126,11 @@ func _physics_process(delta: float) -> void:
 		):
 		is_crouching = false
 	if is_crouching:
-		speed = CRAWLSPEED * SPEEDFACTOR
+		speed = CRAWLSPEED * SPEEDFACTOR * timeboost
 		collisionbox.disabled = true
 		crouchcollisionbox.disabled = false	
 	else:
-		speed = MOVESPEED * SPEEDFACTOR
+		speed = MOVESPEED * SPEEDFACTOR * timeboost
 		collisionbox.disabled = false
 		crouchcollisionbox.disabled = true
 		
@@ -220,8 +223,14 @@ func _physics_process(delta: float) -> void:
 	if is_attacking:
 		return
 	
-	
-	
+	if (Input.is_action_just_pressed("timepower1") and not is_attacking
+		and not is_crouching):
+			level_timer.remove_time(5)
+			timeboost = 1.8
+			hitflash_player.play("Time Flash")
+			$Timers/HurtCooldown.start(3)
+			get_tree().create_timer(3.0).timeout.connect(func(): timeboost = 1.0)
+			
 	
 	
 	
@@ -278,7 +287,7 @@ func _physics_process(delta: float) -> void:
 			pass
 		# if player is moving fast enough to be diving
 		elif velocity.y > 0:
-			if abs(velocity.x) > MOVESPEED + 20:
+			if abs(velocity.x) / timeboost > MOVESPEED + 20:
 				animation_player.play("DiveKick")
 			#else:
 				#animation_player.play("DiveKick Straight")
