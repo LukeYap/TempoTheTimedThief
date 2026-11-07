@@ -31,3 +31,12 @@ func _on_timer_timeout():
 	if is_instance_valid(player):
 		player.die()
 	print("Ran out of time :(")
+
+	
+func remove_time(time):
+	var new_time = leveltimer.time_left - time
+	if new_time > 0:
+		leveltimer.start(new_time)
+	else:
+		leveltimer.start(0.000001)
+	
