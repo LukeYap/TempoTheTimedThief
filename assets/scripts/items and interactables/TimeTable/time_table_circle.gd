@@ -1,3 +1,4 @@
+class_name TimeTable
 extends Node2D
 
 #==================ROTATE CIRCLE=================================================
@@ -29,6 +30,8 @@ var is_rotating: bool = false
 var scene_paths = ["res://assets/scenes/locations/tutorial-the_clock_tower.tscn", 
 "res://assets/scenes/locations/demo.tscn"]
 
+signal send_scene_path(scene: String)
+
 func _ready() -> void:
 
 	var parent = get_parent()
@@ -37,7 +40,9 @@ func _ready() -> void:
 	var base_mesh_scale = base_mesh.global_transform.get_scale()
 
 	if parent and parent is AttoHub:
-		parent_size = await parent.atto_size_calculated
+		var parent_sprite = parent.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+		var parent_curr_sprite = parent_sprite.sprite_frames.get_frame_texture(parent_sprite.animation, parent_sprite.frame)
+		parent_size = parent_curr_sprite.get_size()
 		
 		# adjust the scales and update accordingly
 		base_scale = (parent_size.x / base_mesh_scale.x) / 2.0
@@ -55,20 +60,13 @@ func _ready() -> void:
 	# set radii based on base width / height (with scale!)	
 	radius_x = base_mesh_scale.x
 	radius_y = base_mesh_scale.y
-
-	var tower_index: int = 0
 	
 	# get all tower nodes
 	for child in sub_control_folder.get_children():
 		if child is Control:
 			towers.append(child)
 			child.pivot_offset = child.size * 0.5
-		if child is TextureButton && tower_index < scene_paths.size():
-			# assign a scene to switch to for each tower
-			var scene_path: String = scene_paths[tower_index]
-			tower_index += 1
-			child.pressed.connect(_on_tower_pressed.bind(scene_path))
-	
+			
 	arrange_towers_initially()
 
 # arrange items around the parent's local (0,0) center point once
@@ -156,7 +154,7 @@ func _process(_delta: float) -> void:
 func rotate_towers(direction: int) -> void:
 	is_rotating = true
 	# update current tower index
-	curr_tower = (curr_tower - direction + towers.size()) % towers.size()
+	curr_tower = (curr_tower + direction) % towers.size()
 	update_tower_carousel(true)
 
 func update_tower_carousel(animated: bool) -> void:
@@ -184,7 +182,6 @@ func update_tower_carousel(animated: bool) -> void:
 		var target_scale = Vector2.ONE * scale_value
 		
 		tower.z_index = int(depth_normalized * 100.0)
-		tower.disabled = i != curr_tower
 		
 		if (animated):
 			tween.tween_property(tower, "position", target_position, tween_time)\
@@ -210,9 +207,6 @@ func _get_wrapped_offset(offset: int) -> int:
 		offset += towers.size()
 	return offset
 
-# when a tower is pressed, ensure it goes to its corresponding scene
-func _on_tower_pressed(target_scene: String) -> void:
-	var error = get_tree().change_scene_to_file(target_scene)
-	
-	if error != OK:
-		push_error("Failed to load scene at: " + target_scene)
+func _on_hidden() -> void:
+	var scene = scene_paths[curr_tower] if curr_tower < scene_paths.size() else null
+	send_scene_path.emit(scene)

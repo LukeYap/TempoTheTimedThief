@@ -906,3 +906,5 @@ tile_set = SubResource("TileSet_hfphn")
 
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_aameb")]
 position = Vector2(-152, -16)
+
+[connection signal="hidden" from="NPCs/HubAtto/TimeTable" to="NPCs/HubAtto/TimeTable" method="_on_hidden"]
