@@ -22,13 +22,16 @@ const FRICTION = 0.2
 var SPEEDFACTOR = 1
 
 var is_crouching: bool = false  # Checks if the player is crouching.
-var is_attacking: bool = false	# Checks if the player is attacking.
-var is_divekicking: bool = false # Checks if the player is divekicking.
 var is_damaged: bool = false	# Checks if the player is damaged.
 var is_sliding: bool = false    # Checks if the player is sliding.
 var is_transitioning: bool = false # Checks if the player is transitioning.
 var can_interact: bool = false	# Checks if the player can interact.
 var can_move: bool = true       # Checks if the player can move.
+
+var is_attacking: bool = false	# Checks if the player is attacking.
+var is_basic_attacking: bool = false # Checks if attack is the basic attack.
+var is_aerial_attacking: bool = false
+var is_divekicking: bool = false # Checks if the player is divekicking.
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -57,7 +60,7 @@ var walljump_force: float = 500
 @onready var fx_wallslide: AnimatedSprite2D = $VisualEffects/FX_WallSlide
 
 #================PRELOADS================
-var fx_dki = preload("res://assets/scenes/miscellaneous/fx_divekick_impact.tscn")
+var fx_dki = preload("res://assets/scenes/miscellaneous/effects/fx_divekick_impact.tscn")
 
 
 #============================================================================
@@ -211,13 +214,14 @@ func _physics_process(delta: float) -> void:
 			AudioManager.play_divekick()
 		else:
 			is_attacking = true
+			is_aerial_attacking = true
 			animation_player.play("Air Attack")
 			AudioManager.play_attack()
 			$Timers/HurtCooldown.start(0.1)
 		
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
-	if is_attacking:
+	if is_attacking and not is_aerial_attacking:
 		return
 	
 	
@@ -238,7 +242,7 @@ func _physics_process(delta: float) -> void:
 	
 #================ANIMATIONS================
 	# If the player is grounded:
-	if is_on_floor():
+	if is_on_floor() and not is_attacking:
 		# If the player is crouching:
 		if is_crouching:
 			fx_move.visible = false
@@ -247,12 +251,12 @@ func _physics_process(delta: float) -> void:
 				if animation_player.current_animation == "Slide":
 					animation_player.play("Slide")
 				
-				#if abs(velocity.x) < CRAWLSPEED + 10.0:
-					#animation_player.play("Crawl")
-				#if animation_player.current_animation == "Slide":
-					#animation_player.play("Slide")
-				#else:
-					#animation_player.play("Crawl")
+				if abs(velocity.x) < CRAWLSPEED + 10.0:
+					animation_player.play("Crawl")
+				if animation_player.current_animation == "Slide":
+					animation_player.play("Slide")
+				else:
+					animation_player.play("Crawl")
 			else:
 				animation_player.play("CrouchBeta")
 		# If the player is not crouching:
@@ -271,7 +275,7 @@ func _physics_process(delta: float) -> void:
 	sprite_flip()
 				
 	# If the player is airborne:
-	if not is_on_floor():
+	if not is_on_floor() and not is_aerial_attacking:
 		fx_move.visible = false
 		# if animation is flip animation keep doing that
 		if animation_player.current_animation == "Flip":
@@ -292,9 +296,11 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
 	
-	# Disable hitboxes once animations are finished.
+	# Disable hitboxes once animations are finished/interrupted.
 	if animation_player.current_animation != "DiveKick":
 		$DiveKick/DiveHitbox.disabled = true
+	if animation_player.current_animation != "Air Attack":
+		$Attack/AttackHitbox.disabled = true
 
 #================PROCESS================
 func _process(delta: float) -> void:
@@ -340,12 +346,14 @@ func sprite_flip():
 func _on_animation_player_animation_finished(animation: StringName) -> void:
 	if animation == "Attack" or "Air Attack" or "DiveKick":
 		is_attacking = false
+		is_aerial_attacking = false
 		
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
 		if animation == "Attack":
 			$Timers/BasicAttackCooldown.start()
-		
+
+
 #================SLOW ZONE================
 # Upon entering a slow zone hazard, Tempo's movement speeed should be
 # decreased. Upon exiting, return to normal.
@@ -355,7 +363,6 @@ func enter_slow_zone() -> void:
 func exit_slow_zone() -> void:	
 	SPEEDFACTOR = 1
 	fx_slow.visible = false
-
 
 #================DIVE BOUNCE================
 # Upon dive-kicking something, Tempo may bounce off of it.

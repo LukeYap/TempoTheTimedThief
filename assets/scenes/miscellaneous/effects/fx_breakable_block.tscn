@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://ckqhx6e60aaoy"]
+
+[ext_resource type="Texture2D" uid="uid://d1fvkxoexbmga" path="res://assets/sprites/items and interactables/breakables/Breakable Block Explosion.png" id="1_yyomw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_67vpi"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bc3bh"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdnmg"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dhih6"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sv4kn"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dpft8"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aminv"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6spjl"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nbmku"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_soash"]
+atlas = ExtResource("1_yyomw")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7fic8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_67vpi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bc3bh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdnmg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dhih6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sv4kn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dpft8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aminv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6spjl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nbmku")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_soash")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="BreakableBlockBoom" type="AnimatedSprite2D" unique_id=1125674996]
+sprite_frames = SubResource("SpriteFrames_7fic8")
+frame = 9
+frame_progress = 1.0

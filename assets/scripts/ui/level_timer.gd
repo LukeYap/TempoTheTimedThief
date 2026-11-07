@@ -6,10 +6,18 @@ extends Node2D
 @onready var timerlabel: Label = $Label
 
 func _ready() -> void:
-	
 	add_to_group("level_timer")
 	
-	#position = Vector2(get_parent().size.x / 2, 30)
+	# Initial amount of time differs based on level.
+	match LevelManager.current_level:
+		0:
+			totalleveltime = 360
+		1:
+			totalleveltime = 360
+		2:
+			totalleveltime = 360
+		
+	
 	leveltimer.start(totalleveltime)
 	timerlabel.text = "%.1f" % leveltimer.time_left
 	

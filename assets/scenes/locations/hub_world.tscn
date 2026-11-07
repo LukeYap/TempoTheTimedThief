@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://ocrlkomeg63g"]
 
 [ext_resource type="Texture2D" uid="uid://cwk1pyg1q2jj0" path="res://assets/sprites/tilesets/Tileset (Clock Tower).png" id="1_0qla1"]
+[ext_resource type="PackedScene" uid="uid://bcoj2t6rvvmf2" path="res://assets/scenes/ui/hud.tscn" id="1_b34on"]
 [ext_resource type="Texture2D" uid="uid://ccmrwch72prq1" path="res://assets/sprites/tilesets/parallax/Bright Sky (Clock Tower)/brightsky0.png" id="1_sclpv"]
 [ext_resource type="PackedScene" uid="uid://dt408k2a66tfs" path="res://assets/scenes/player/player.tscn" id="2_aameb"]
 [ext_resource type="Texture2D" uid="uid://dqcldixob36ga" path="res://assets/sprites/tilesets/parallax/Bright Sky (Clock Tower)/brightsky1.png" id="2_sclpv"]
@@ -663,6 +664,10 @@ texture = ExtResource("1_0qla1")
 sources/0 = SubResource("TileSetAtlasSource_p6b72")
 
 [node name="HubWorld" type="Node2D" unique_id=1400321712]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1429557412]
+
+[node name="HUD" parent="CanvasLayer" unique_id=1669747353 instance=ExtResource("1_b34on")]
 
 [node name="ParallaxBG" type="Node2D" parent="." unique_id=8344869]
 metadata/_edit_lock_ = true
