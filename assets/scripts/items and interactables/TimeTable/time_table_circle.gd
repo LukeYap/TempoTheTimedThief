@@ -1,19 +1,23 @@
-extends Control
+class_name TimeTable
+extends Node2D
 
 #==================ROTATE CIRCLE=================================================
 # This script has the object rotate in a circular motion and rotate its children
 # around it, ensuring the children stay upright.
 
-@export var front_scale: float = 0.8
-@export var back_scale: float = 0.4
+@export var base_scale: float = 0.2
+@export var front_back_ratio: float = 1.0
 @export var side_alpha: float = 0.55
 @export var tween_time: float = 0.5
 
-@export var offset_degrees: float = 145
+@export var offset_degrees: float = 180
 @export var steps_per_tower: int = 8
 
 @onready var sub_control_folder: Control = $Towers
 @onready var base_mesh: Polygon2D = $Base
+
+var front_scale = base_scale * front_back_ratio
+var back_scale = base_scale
 
 var radius_x: float = 200.0
 var radius_y: float = 200.0
@@ -26,31 +30,43 @@ var is_rotating: bool = false
 var scene_paths = ["res://assets/scenes/locations/tutorial-the_clock_tower.tscn", 
 "res://assets/scenes/locations/demo.tscn"]
 
-func _ready() -> void:
-	
-	# lock pivot to the center of the viewport
-	# you would simply do this for wherever this needs to go!
-	var screen_center = get_viewport_rect().size / 2.0
-	self.global_position = screen_center
+signal send_scene_path(scene: String)
 
-	var tower_index: int = 0
+func _ready() -> void:
+
+	var parent = get_parent()
+	var parent_size = Vector2(1, 1)
+	
+	var base_mesh_scale = base_mesh.global_transform.get_scale()
+
+	if parent and parent is AttoHub:
+		var parent_sprite = parent.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+		var parent_curr_sprite = parent_sprite.sprite_frames.get_frame_texture(parent_sprite.animation, parent_sprite.frame)
+		parent_size = parent_curr_sprite.get_size()
+		
+		# adjust the scales and update accordingly
+		base_scale = (parent_size.x / base_mesh_scale.x) / 2.0
+		front_back_ratio = (parent_size.x / parent_size.y) 
+		front_scale = base_scale * front_back_ratio
+		back_scale = base_scale
+		
+		# "float" above Atto's head
+		self.position = Vector2(self.position.x, self.position.y - parent_size.y)
+	else: 
+		# no parent - align to center of screen
+		var screen_center = get_viewport_rect().size / 2.0
+		self.global_position = screen_center
+	
+	# set radii based on base width / height (with scale!)	
+	radius_x = base_mesh_scale.x
+	radius_y = base_mesh_scale.y
 	
 	# get all tower nodes
 	for child in sub_control_folder.get_children():
 		if child is Control:
 			towers.append(child)
 			child.pivot_offset = child.size * 0.5
-		if child is TextureButton && tower_index < scene_paths.size():
-			# assign a scene to switch to for each tower
-			var scene_path: String = scene_paths[tower_index]
-			tower_index += 1
-			child.pressed.connect(_on_tower_pressed.bind(scene_path))
-	
-	# set radii based on base width / height (with scale!)	
-	var base_scale = base_mesh.transform.get_scale();
-	radius_x = (base_scale.x)
-	radius_y = (base_scale.y)
-	
+			
 	arrange_towers_initially()
 
 # arrange items around the parent's local (0,0) center point once
@@ -75,14 +91,14 @@ func set_base_polygon() -> void:
 			var progress_ratio = (fractional_i - float(curr_tower)) / float(towers.size())
 			var angle = progress_ratio * TAU + (offset_degrees * PI / 180.0)
 			
-			var depth = cos(angle)
-			var x = sin(angle) * radius_x
-			var y = -depth * radius_y
-			
 			# get same depth used on towers
+			var depth = cos(angle)
 			var depth_normalized = inverse_lerp(1.0, -1.0, depth)
 			var scale_value = lerp(back_scale, front_scale, depth_normalized)
 			
+			var x = sin(angle) * radius_x * scale_value
+			var y = -depth * radius_y * scale_value
+
 			# factor in depth to get actual location for polygon point
 			var true_bottom_center = Vector2(x, y + (tower.size.y * scale_value) * 0.5)
 			tower_locations.append(true_bottom_center)
@@ -126,7 +142,7 @@ func set_base_polygon() -> void:
 	base_mesh.position = Vector2.ZERO
 	base_mesh.rotation = 0.0
 	base_mesh.scale = Vector2.ONE
-	base_mesh.z_index = -1
+	base_mesh.z_index = 10 # position in front of the scene so it shows up!!
 
 func _process(_delta: float) -> void:	
 	if is_rotating: return
@@ -138,7 +154,7 @@ func _process(_delta: float) -> void:
 func rotate_towers(direction: int) -> void:
 	is_rotating = true
 	# update current tower index
-	curr_tower = (curr_tower - direction + towers.size()) % towers.size()
+	curr_tower = (curr_tower + direction) % towers.size()
 	update_tower_carousel(true)
 
 func update_tower_carousel(animated: bool) -> void:
@@ -152,19 +168,20 @@ func update_tower_carousel(animated: bool) -> void:
 		var offset = _get_wrapped_offset(i - curr_tower)
 		var angle = offset * TAU / float(towers.size()) + offset_degrees * PI / 180
 		
+		# get same depth used on towers
 		var depth = cos(angle)
-		var x = sin(angle) * radius_x
-		var y = -depth * radius_y
-		
 		var depth_normalized = inverse_lerp(1.0, -1.0, depth)
 		var scale_value = lerp(back_scale, front_scale, depth_normalized)
+		
+		var x = sin(angle) * radius_x * scale_value
+		var y = -depth * radius_y * scale_value
+
 		var alpha_value = lerp(side_alpha, 1.0, depth_normalized)
 		
 		var target_position = Vector2(x, y) - tower.pivot_offset
 		var target_scale = Vector2.ONE * scale_value
 		
 		tower.z_index = int(depth_normalized * 100.0)
-		tower.disabled = i != curr_tower
 		
 		if (animated):
 			tween.tween_property(tower, "position", target_position, tween_time)\
@@ -190,9 +207,6 @@ func _get_wrapped_offset(offset: int) -> int:
 		offset += towers.size()
 	return offset
 
-# when a tower is pressed, ensure it goes to its corresponding scene
-func _on_tower_pressed(target_scene: String) -> void:
-	var error = get_tree().change_scene_to_file(target_scene)
-	
-	if error != OK:
-		push_error("Failed to load scene at: " + target_scene)
+func _on_hidden() -> void:
+	var scene = scene_paths[curr_tower] if curr_tower < scene_paths.size() else null
+	send_scene_path.emit(scene)

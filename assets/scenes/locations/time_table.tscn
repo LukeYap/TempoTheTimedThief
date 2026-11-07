@@ -1,34 +1,24 @@
 [gd_scene format=3 uid="uid://b0ra88rj8lucg"]
 
 [ext_resource type="Script" uid="uid://dvqt5s27axjcm" path="res://assets/scripts/items and interactables/TimeTable/time_table_circle.gd" id="1_n8r23"]
-[ext_resource type="Texture2D" uid="uid://dfc13nv2h2kiv" path="res://assets/sprites/extras/PlaceholderClock.png" id="2_i0cq8"]
+[ext_resource type="Texture2D" uid="uid://oh2elxtaxofa" path="res://assets/sprites/ui/AttoClockUI.png" id="2_i0cq8"]
 [ext_resource type="Texture2D" uid="uid://uy47ytwf04oh" path="res://assets/sprites/extras/TutorialTowerPlaceholder.png" id="3_82wir"]
 [ext_resource type="Texture2D" uid="uid://ca2r8wv3k7s2s" path="res://assets/sprites/extras/DemoTowerPlaceholder.png" id="4_y5yvo"]
 
-[node name="TimeTable" type="Node2D" unique_id=1974711474]
-
-[node name="TimeTableCircle" type="Control" parent="." unique_id=1561556262]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TimeTable" type="Node2D" unique_id=1081563961]
 script = ExtResource("1_n8r23")
-back_scale = 0.3
 
-[node name="Base" type="Polygon2D" parent="TimeTableCircle" unique_id=673006610]
+[node name="Base" type="Polygon2D" parent="." unique_id=492623180]
 scale = Vector2(400, 150)
 texture = ExtResource("2_i0cq8")
 
-[node name="Towers" type="Control" parent="TimeTableCircle" unique_id=924081754]
+[node name="Towers" type="Control" parent="." unique_id=1194262055]
+layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Tower1" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=849404794]
+[node name="Tower1" type="TextureButton" parent="Towers" unique_id=873567165]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -44,7 +34,7 @@ grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("3_82wir")
 
-[node name="Tower2" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=118852364]
+[node name="Tower2" type="TextureButton" parent="Towers" unique_id=357649336]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -60,7 +50,7 @@ grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("4_y5yvo")
 
-[node name="Tower3" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=562702965]
+[node name="Tower3" type="TextureButton" parent="Towers" unique_id=118210579]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -76,7 +66,7 @@ grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("4_y5yvo")
 
-[node name="Tower4" type="TextureButton" parent="TimeTableCircle/Towers" unique_id=1299734505]
+[node name="Tower4" type="TextureButton" parent="Towers" unique_id=545827384]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://70ara05dw35v" path="res://assets/scenes/items and interactables/zones/door_zone.tscn" id="12_uu65l"]
 [ext_resource type="PackedScene" uid="uid://mq0eiacgc11w" path="res://assets/scenes/items and interactables/treasure/small_jar.tscn" id="13_b34on"]
 [ext_resource type="PackedScene" uid="uid://dot4y576dddh4" path="res://assets/scenes/npcs/hub/hub_hands_man.tscn" id="14_j1fh1"]
+[ext_resource type="PackedScene" uid="uid://b0ra88rj8lucg" path="res://assets/scenes/locations/time_table.tscn" id="15_b34on"]
 [ext_resource type="PackedScene" uid="uid://bjk6q4ncx4uyg" path="res://assets/scenes/npcs/hub/hub_anna_crow.tscn" id="17_decxq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b34on"]
@@ -822,6 +823,8 @@ position = Vector2(2, -40)
 [node name="HubAtto" parent="NPCs" unique_id=2040366194 instance=ExtResource("11_i5tbd")]
 position = Vector2(-1, 0)
 
+[node name="TimeTable" parent="NPCs/HubAtto" unique_id=1974711474 instance=ExtResource("15_b34on")]
+
 [node name="HubHandsMan" parent="NPCs" unique_id=671707029 instance=ExtResource("14_j1fh1")]
 position = Vector2(190, 400)
 
@@ -908,3 +911,5 @@ tile_set = SubResource("TileSet_hfphn")
 
 [node name="Player" parent="." unique_id=1102362985 instance=ExtResource("2_aameb")]
 position = Vector2(-152, -16)
+
+[connection signal="hidden" from="NPCs/HubAtto/TimeTable" to="NPCs/HubAtto/TimeTable" method="_on_hidden"]
