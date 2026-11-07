@@ -1,10 +1,10 @@
-extends Control
+extends Node2D
 
 #==================ROTATE CIRCLE=================================================
 # This script has the object rotate in a circular motion and rotate its children
 # around it, ensuring the children stay upright.
 
-@export var base_scale: float = 0.5
+@export var base_scale: float = 0.2
 @export var front_back_ratio: float = 1.0
 @export var side_alpha: float = 0.55
 @export var tween_time: float = 0.5
@@ -30,11 +30,31 @@ var scene_paths = ["res://assets/scenes/locations/tutorial-the_clock_tower.tscn"
 "res://assets/scenes/locations/demo.tscn"]
 
 func _ready() -> void:
+
+	var parent = get_parent()
+	var parent_size = Vector2(1, 1)
 	
-	# lock pivot to the center of the viewport
-	# you would simply do this for wherever this needs to go!
-	var screen_center = get_viewport_rect().size / 2.0
-	self.global_position = screen_center
+	var base_mesh_scale = base_mesh.global_transform.get_scale()
+
+	if parent and parent is AttoHub:
+		parent_size = await parent.atto_size_calculated
+		
+		# adjust the scales and update accordingly
+		base_scale = (parent_size.x / base_mesh_scale.x) / 2.0
+		front_back_ratio = (parent_size.x / parent_size.y) 
+		front_scale = base_scale * front_back_ratio
+		back_scale = base_scale
+		
+		# "float" above Atto's head
+		self.position = Vector2(self.position.x, self.position.y - parent_size.y)
+	else: 
+		# no parent - align to center of screen
+		var screen_center = get_viewport_rect().size / 2.0
+		self.global_position = screen_center
+	
+	# set radii based on base width / height (with scale!)	
+	radius_x = base_mesh_scale.x
+	radius_y = base_mesh_scale.y
 
 	var tower_index: int = 0
 	
@@ -48,11 +68,6 @@ func _ready() -> void:
 			var scene_path: String = scene_paths[tower_index]
 			tower_index += 1
 			child.pressed.connect(_on_tower_pressed.bind(scene_path))
-	
-	# set radii based on base width / height (with scale!)	
-	var base_scale = base_mesh.transform.get_scale();
-	radius_x = (base_scale.x)
-	radius_y = (base_scale.y)
 	
 	arrange_towers_initially()
 
@@ -129,7 +144,7 @@ func set_base_polygon() -> void:
 	base_mesh.position = Vector2.ZERO
 	base_mesh.rotation = 0.0
 	base_mesh.scale = Vector2.ONE
-	base_mesh.z_index = -1
+	base_mesh.z_index = 10 # position in front of the scene so it shows up!!
 
 func _process(_delta: float) -> void:	
 	if is_rotating: return
