@@ -9,11 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://d2eu0x46hxdch" path="res://assets/sprites/player/Sheets/Crouch.png" id="4_5v77c"]
 [ext_resource type="Texture2D" uid="uid://cmppn4brknccc" path="res://assets/sprites/player/Sheets/Crawl.png" id="4_n7aby"]
 [ext_resource type="Script" uid="uid://c3a3spfddkdn6" path="res://assets/scripts/player/camera.gd" id="4_oet4l"]
+[ext_resource type="Texture2D" uid="uid://dhwe0dwddbnj1" path="res://assets/sprites/player/Sheets/Air Attack.png" id="5_f0e17"]
 [ext_resource type="Texture2D" uid="uid://bwvf1g3onqqpp" path="res://assets/sprites/player/Sheets/Fall.png" id="6_0g25m"]
 [ext_resource type="Texture2D" uid="uid://cay78mkle2mty" path="res://assets/sprites/player/Sheets/Damaged.png" id="6_u84jc"]
 [ext_resource type="Texture2D" uid="uid://cf0n15puydccy" path="res://assets/sprites/player/Sheets/Dive Kick.png" id="6_yfi7d"]
 [ext_resource type="Texture2D" uid="uid://cdo2fpeho8hsm" path="res://assets/sprites/player/Sheets/Flip.png" id="7_hsamt"]
 [ext_resource type="Texture2D" uid="uid://1of62oqxee2f" path="res://assets/sprites/player/Sheets/Slide.png" id="9_hyvrl"]
+[ext_resource type="Texture2D" uid="uid://dtpq66kanogvq" path="res://assets/sprites/player/Sheets/Dive Kick Straight.png" id="10_jf6n8"]
 [ext_resource type="Texture2D" uid="uid://cflnlp3lwu1gh" path="res://assets/sprites/player/Sheets/Wall Slide.png" id="12_b3dqe"]
 [ext_resource type="Texture2D" uid="uid://qflnsyldytv4" path="res://assets/sprites/player/VFX Sheets/Move.png" id="16_rrkuk"]
 [ext_resource type="Texture2D" uid="uid://ba217ur4jpwr2" path="res://assets/sprites/player/VFX Sheets/Slow.png" id="17_rrkuk"]
@@ -37,15 +39,71 @@ height = 14.0
 size = Vector2(31, 28)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q3ml6"]
-size = Vector2(25, 31)
+size = Vector2(25, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jf6n8"]
+size = Vector2(8, 7)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b3dqe"]
 radius = 7.0
 height = 24.0
 
+[sub_resource type="Animation" id="Animation_xflxm"]
+resource_name = "Air Attack"
+length = 0.15
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_f0e17")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [7]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Attack/AttackHitbox:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
 [sub_resource type="Animation" id="Animation_ratu8"]
 resource_name = "Attack"
-length = 0.3
+length = 0.19999999999999998
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -78,7 +136,7 @@ tracks/2/path = NodePath("Sprite2D:frame")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.024999999, 0.049999997, 0.10000001, 0.12500001, 0.14999999, 0.17500003, 0.19999999, 0.25),
+"times": PackedFloat32Array(0, 0.024999999, 0.049999997, 0.075, 0.10000001, 0.124999985, 0.15000002, 0.17499998, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -90,10 +148,10 @@ tracks/3/path = NodePath("Attack/AttackHitbox:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.25),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true, false, true]
+"values": [false, true]
 }
 
 [sub_resource type="Animation" id="Animation_yfi7d"]
@@ -358,6 +416,45 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_jf6n8"]
+resource_name = "DiveKick Straight"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_jf6n8")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_0gfpk"]
@@ -748,6 +845,7 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_14505"]
 _data = {
+&"Air Attack": SubResource("Animation_xflxm"),
 &"Attack": SubResource("Animation_ratu8"),
 &"AttackBeta": SubResource("Animation_yfi7d"),
 &"Crawl": SubResource("Animation_o5c66"),
@@ -755,6 +853,7 @@ _data = {
 &"CrouchBeta": SubResource("Animation_0g25m"),
 &"Damaged": SubResource("Animation_oet4l"),
 &"DiveKick": SubResource("Animation_b3dqe"),
+&"DiveKick Straight": SubResource("Animation_jf6n8"),
 &"Fall": SubResource("Animation_0gfpk"),
 &"FallBeta": SubResource("Animation_hyvrl"),
 &"Flip": SubResource("Animation_u84jc"),
@@ -1098,9 +1197,18 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="DiveHitbox" type="CollisionShape2D" parent="DiveKick" unique_id=2012992582]
-position = Vector2(12.5, 7.5)
+position = Vector2(12.5, 7)
 shape = SubResource("RectangleShape2D_q3ml6")
 disabled = true
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="Head" type="Area2D" parent="." unique_id=361428018]
+collision_layer = 4
+collision_mask = 0
+
+[node name="Bonk" type="CollisionShape2D" parent="Head" unique_id=2056398561]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_jf6n8")
 debug_color = Color(1, 0, 0, 0.41960785)
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=136945510]
@@ -1114,12 +1222,14 @@ debug_color = Color(0.99673706, 0, 0.1898483, 0.41960785)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1351649107]
 position = Vector2(0, -44)
-zoom = Vector2(3, 3)
 process_callback = 0
 limit_smoothed = true
-position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 script = ExtResource("4_oet4l")
+lookahead_distance = 20.0
+lookahead_speed = 5.0
+min_speed = 1.0
+turn_delay = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1517579445]
 libraries/ = SubResource("AnimationLibrary_14505")
@@ -1135,7 +1245,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="BasicAttackCooldown" type="Timer" parent="Timers" unique_id=1081269277]
-wait_time = 0.05
+wait_time = 0.001
 one_shot = true
 
 [node name="HurtCooldown" type="Timer" parent="Timers" unique_id=984294383]
@@ -1150,7 +1260,7 @@ visible = false
 position = Vector2(0, -24)
 sprite_frames = SubResource("SpriteFrames_oet4l")
 autoplay = "default"
-frame_progress = 1.0
+frame_progress = 0.79977244
 
 [node name="FX_Slow" type="AnimatedSprite2D" parent="VisualEffects" unique_id=1350513643]
 visible = false

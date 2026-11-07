@@ -16,16 +16,19 @@ const MOVESPEED = 200.0			# Normal movement speed.
 const JUMP_VELOCITY = -270.0	# Normal jump velocity.
 
 const ACCEL = 0.15
-const FRICTION = 0.3
+const FRICTION = 0.2
 # This variable changes based on certain zones. Default 1.
 # Ex. A slow zone should have this factor set to 0.5.
 var SPEEDFACTOR = 1
 
 var is_crouching: bool = false  # Checks if the player is crouching.
 var is_attacking: bool = false	# Checks if the player is attacking.
+var is_divekicking: bool = false # Checks if the player is divekicking.
 var is_damaged: bool = false	# Checks if the player is damaged.
 var is_sliding: bool = false    # Checks if the player is sliding.
+var is_transitioning: bool = false # Checks if the player is transitioning.
 var can_interact: bool = false	# Checks if the player can interact.
+var can_move: bool = true       # Checks if the player can move.
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -49,9 +52,13 @@ var walljump_force: float = 500
 @onready var hitbox: CollisionShape2D = $Attack/AttackHitbox
 @onready var hurtbox: CollisionShape2D = $Hurtbox/PlayerHurtbox
 #================VISUAL EFFECTS================
-@onready var fx_move :AnimatedSprite2D = $VisualEffects/FX_Move
-@onready var fx_slow :AnimatedSprite2D = $VisualEffects/FX_Slow
-@onready var fx_wallslide :AnimatedSprite2D = $VisualEffects/FX_WallSlide
+@onready var fx_move: AnimatedSprite2D = $VisualEffects/FX_Move
+@onready var fx_slow: AnimatedSprite2D = $VisualEffects/FX_Slow
+@onready var fx_wallslide: AnimatedSprite2D = $VisualEffects/FX_WallSlide
+
+#================PRELOADS================
+var fx_dki = preload("res://assets/scenes/miscellaneous/fx_divekick_impact.tscn")
+
 
 #============================================================================
 #==================FUNCTIONS=================================================
@@ -59,6 +66,10 @@ var walljump_force: float = 500
 
 #================READY================
 func _ready():
+	# Placeholder health.
+	curr_health = 100
+	add_to_group("player")
+	
 	# This helps detect when a player animation finishes.
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
 	
@@ -69,21 +80,29 @@ func _ready():
 	fx_move.visible = false
 	fx_slow.visible = false
 	fx_wallslide.visible = false
-	curr_health = 100
+	
 	
 #================PHYSICS PROCESS================
 func _physics_process(delta: float) -> void:
+	if not can_move:
+		animation_player.play("Idle")
+		fx_move.visible = false
+		return
 	
-	# Gravity and wall slide.
+#================GRAVITY================
 	if not is_on_floor():
 		is_crouching = false				
 		velocity += get_gravity() * delta
-		# if wall sliding
+
+#================WALL SLIDE================
 		if is_on_wall_only() and direction != 0:
 			# tweak wall slide speed
+			velocity.y = clamp(velocity.y, -99999, 80)
+			
 			fx_wallslide.play()
 			fx_wallslide.visible = true
-			velocity.y = clamp(velocity.y, -99999, 80)
+	
+	# Stop wallslide VFX when player leaves wall cling.
 	if not is_on_wall_only():
 		fx_wallslide.stop()
 		fx_wallslide.visible = false
@@ -93,7 +112,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("crouch"):
 		if is_on_floor():
 			is_crouching = true
-		
 	if (
 		# to make sliding slower or more committal you
 		# could make it so you dont stand up until you reach
@@ -126,11 +144,12 @@ func _physics_process(delta: float) -> void:
 		coyote_timer.stop()
 		coyote_time_active = true
 		AudioManager.play_jump()
-	#slide controls
+	#================SLIDE================
 	if Input.is_action_just_pressed("jump") and is_crouching:
 		if direction and abs(velocity.x) < CRAWLSPEED + 5.0:
-			animation_player.play("Slide")
 			velocity.x = SLIDESPEED * direction
+			animation_player.play("Slide")
+			AudioManager.play_slide()
 		
 #================FALL================
 	# Allows the player to perform short hops.
@@ -150,6 +169,7 @@ func _physics_process(delta: float) -> void:
 		# So wall jump should provide a boost in the opposite direction.
 		velocity.y = JUMP_VELOCITY
 		velocity.x = -(walljump_raycast.scale.x) * walljump_force
+		AudioManager.play_jump()
 	
 #================COYOTE TIME================
 # If the player is grounded and the coyote time window is active,
@@ -165,9 +185,6 @@ func _physics_process(delta: float) -> void:
 
 #================BASIC ATTACK================
 # A basic attack.
-# The player needs to not be already attacking,
-# not be crouching, not be airborne,
-# and the cooldown time on the basic attack needs to be finished.
 	if (
 		Input.is_action_just_pressed("attack")
 		and not is_attacking
@@ -178,15 +195,36 @@ func _physics_process(delta: float) -> void:
 		is_attacking = true
 		animation_player.play("Attack")
 		AudioManager.play_attack()
-	#divekick code
-	if Input.is_action_just_pressed("attack") and not is_on_floor() and Input.is_action_pressed("crouch"):
-		velocity.x = DIVESPEED * direction
-		velocity.y = 300
-		animation_player.play("DiveKick")
+		
+#================DIVE KICK================
+	if (
+		Input.is_action_just_pressed("attack") 
+		and not is_on_floor() 
+		):
+		if (
+			Input.is_action_pressed("crouch")
+		):
+			#is_divekicking = true
+			velocity.x = DIVESPEED * sign(hitbox.position.x)
+			velocity.y = 300
+					
+			AudioManager.play_divekick()
+		else:
+			is_attacking = true
+			animation_player.play("Air Attack")
+			AudioManager.play_attack()
+			$Timers/HurtCooldown.start(0.1)
+		
 	# This line prevents the attack animation from being
 	# interrupted by anything else.
 	if is_attacking:
 		return
+	
+	
+	
+	
+	
+	
 	
 #================MOVE================
 # Input direction.
@@ -206,12 +244,15 @@ func _physics_process(delta: float) -> void:
 			fx_move.visible = false
 			# If the player is moving while crouching:
 			if direction:
-				if abs(velocity.x) < CRAWLSPEED + 10.0:
-					animation_player.play("Crawl")
 				if animation_player.current_animation == "Slide":
 					animation_player.play("Slide")
-				else:
-					animation_player.play("Crawl")
+				
+				#if abs(velocity.x) < CRAWLSPEED + 10.0:
+					#animation_player.play("Crawl")
+				#if animation_player.current_animation == "Slide":
+					#animation_player.play("Slide")
+				#else:
+					#animation_player.play("Crawl")
 			else:
 				animation_player.play("CrouchBeta")
 		# If the player is not crouching:
@@ -236,19 +277,25 @@ func _physics_process(delta: float) -> void:
 		if animation_player.current_animation == "Flip":
 			pass
 		# if player is moving fast enough to be diving
-		elif abs(velocity.x) > MOVESPEED + 20 and velocity.y > 0:
-			animation_player.play("DiveKick")
+		elif velocity.y > 0:
+			if abs(velocity.x) > MOVESPEED + 20:
+				animation_player.play("DiveKick")
+			#else:
+				#animation_player.play("DiveKick Straight")
 		# If the player is moving upward:
 		elif sign(velocity.y) == -1:
 			animation_player.play("Jump")
-		# If the player is moving upward:
+		# If the player is moving downward:
 		else:
 			animation_player.play("FallBeta")
+			
 	if is_on_wall_only() and velocity.y > 0 and direction != 0:
 		animation_player.play("WallSlide")
+	
+	# Disable hitboxes once animations are finished.
 	if animation_player.current_animation != "DiveKick":
 		$DiveKick/DiveHitbox.disabled = true
-		
+
 #================PROCESS================
 func _process(delta: float) -> void:
 	# When the invulnerability period after taking damage has finished
@@ -257,6 +304,11 @@ func _process(delta: float) -> void:
 		hurtbox.disabled = true
 	else:
 		hurtbox.disabled = false
+		
+	#if Input.is_action_just_pressed("timepower1"):
+		#Engine.time_scale = 0.5
+	#if Input.is_action_just_pressed("timepower2"):
+		#Engine.time_scale = 1
 
 #================SPRITE FLIP================
 # Logic to reverse sprites, some VFX and hitboxes based on x direction.
@@ -286,11 +338,13 @@ func sprite_flip():
 #================FINISH ANIMATION================
 # After finishing an attack animation, return normal controls.
 func _on_animation_player_animation_finished(animation: StringName) -> void:
-	if animation == "Attack":
+	if animation == "Attack" or "Air Attack" or "DiveKick":
 		is_attacking = false
+		
 		# When the basic attack cooldown timer is up,
 		# the player can perform a basic attack again.
-		$Timers/BasicAttackCooldown.start()
+		if animation == "Attack":
+			$Timers/BasicAttackCooldown.start()
 		
 #================SLOW ZONE================
 # Upon entering a slow zone hazard, Tempo's movement speeed should be
@@ -302,7 +356,15 @@ func exit_slow_zone() -> void:
 	SPEEDFACTOR = 1
 	fx_slow.visible = false
 
+
+#================DIVE BOUNCE================
+# Upon dive-kicking something, Tempo may bounce off of it.
+# An impact VFX is instantiated at the spot of collision for flair.
 func dive_bounce():
+	var impact = fx_dki.instantiate()
+	impact.global_position = position	
+	get_parent().call_deferred("add_child", impact)
+	impact.play()
 	velocity.y = -300
 	$Timers/HurtCooldown.start(1)
 	$AnimationPlayer.play("Flip")
@@ -313,13 +375,19 @@ func dive_bounce():
 # and he gets knocked back a bit.
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area is damageArea:
-		if hurtbox.disabled == false:
-			take_damage(area.damage, area.global_position, area.knock_force)
+		# Wait until the end of the frame before applying the hit.
+		# If a dive kick lands on the same enemy this frame, dive_bounce()
+		# will have started the invincibility timer by then.
+		check_hit.call_deferred(area)
+
+func check_hit(area: Area2D) -> void:
+	# Check the timer directly, since hurtbox.disabled
+	# only updates in _process() and can be a frame behind.
+	if is_instance_valid(area) and $Timers/HurtCooldown.is_stopped():
+		take_damage(area.damage, area.global_position, area.knock_force)
 	
 func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 	curr_health -= amount
-	
-	
 	
 	# If the attack causes Tempo's timer to reach 0, death is imminent.
 	if curr_health <= 0:
@@ -332,7 +400,7 @@ func take_damage(amount: int, hazard_pos: Vector2, knockback: float) -> void:
 		velocity = knock_dir * knockback
 		
 		hitflash_player.play("Hit Flash")
-		
+		AudioManager.play_damaged()
 		$Timers/HurtCooldown.start(2)
 		
 #================DEATH================
